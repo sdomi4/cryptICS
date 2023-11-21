@@ -10,12 +10,18 @@ class DiffRequest(BaseModel):
     input2: str
 
 class Plugin():
+    name = "plugins.diff"
+    dependencies = None
+    endpoints = {
+        "diff": {
+            "uri": "/plugins/diff",
+            "tags": ["utility"]
+        }
+    }
+
     router = APIRouter(
         prefix="/plugins"
     )
-
-    def dependencies(self):
-        return None
 
     def register(self):
         print("Registering Diff API endpoint")

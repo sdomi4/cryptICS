@@ -15,12 +15,22 @@ class SubGroupResponse(BaseModel):
     subgroups: list[dict]
 
 class Plugin():
+    name = "plugins.subgroups"
+    dependencies = None
+    endpoints = {
+        "is_group": {
+            "uri": "/plugins/groups/is_group",
+            "tags": ["group_theory"]
+        },
+        "subgroups": {
+            "uri": "/plugins/groups/subgroups",
+            "tags": ["group_theory"]
+        }
+    }
+
     router = APIRouter(
         prefix="/plugins/groups"
     )
-
-    def dependencies(self):
-        return None
 
     def register(self):
         print("Registering Subgroup API endpoints...")
