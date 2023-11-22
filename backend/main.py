@@ -19,6 +19,7 @@ print(plugins)
 app = FastAPI()
 
 _plugin_info = {}
+_homepage = []
 for plugin in plugins:
     _plugin_info[plugin] = {
         "endpoints": {},
@@ -47,7 +48,9 @@ for plugin in _plugins:
                 dependencies = False
     if plugin.endpoints:
         for endpoint in plugin.endpoints:
-            _plugin_info[plugin.name]["endpoints"][endpoint] = plugin.endpoints[endpoint]
+            _plugin_info[plugin.name]["endpoints"][endpoint["tag"]] = endpoint["uri"]
+            if endpoint["tag"] == "homepage":
+                _homepage.append(endpoint)
     plugin_register = plugin.register()
     if plugin_register and not dependencies == False:
         app.include_router(plugin_register)
@@ -59,3 +62,7 @@ def root():
 @app.get("/plugins", response_model=dict)
 def plugins():
     return _plugin_info
+
+@app.get("/plugins/homepage", response_model=list)
+def homepage():
+    return _homepage

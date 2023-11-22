@@ -17,16 +17,13 @@ class SubGroupResponse(BaseModel):
 class Plugin():
     name = "plugins.subgroups"
     dependencies = None
-    endpoints = {
-        "is_group": {
-            "uri": "/plugins/groups/is_group",
-            "tags": ["group_theory"]
-        },
-        "subgroups": {
-            "uri": "/plugins/groups/subgroups",
-            "tags": ["group_theory"]
+    endpoints = [
+        {
+            "uri": "/subgroups",
+            "tag": "homepage",
+            "description": "Group Theory"
         }
-    }
+    ]
 
     router = APIRouter(
         prefix="/plugins/groups"

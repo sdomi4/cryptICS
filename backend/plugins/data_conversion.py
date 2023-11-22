@@ -37,16 +37,7 @@ class Plugin():
     # API endpoints contained in the plugin
     # should contain the URI and relevant tags so they can be discovered / loaded by the frontend
     # tags are 
-    endpoints = {
-        "binaryString": {
-            "uri": "/plugins/binaryString",
-            "tags": ["utility"]
-        },
-        "toBlocks": {
-            "uri": "/plugins/toBlocks",
-            "tags": ["utility", "padding", "block_ciphers"]
-        }
-    }
+    endpoints = {}
 
     # Instantiate router instance, all plugins are prefixed with at least /plugins
     router = APIRouter(

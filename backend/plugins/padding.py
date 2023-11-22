@@ -21,20 +21,7 @@ class BlockSplitResponse(BaseModel):
 class Plugin():
     name = "plugins.padding"
     dependencies = ["plugins.data_conversion"]
-    endpoints = {
-        "pad" : {
-            "uri": "/plugins/pad",
-            "tags": ["block_ciphers", "utility", "padding"]
-        },
-        "unpad": {
-            "uri": "/plugins/unpad",
-            "tags": ["block_ciphers", "utility", "padding"]
-        },
-        "split": {
-            "uri": "/plugins/split",
-            "tags": ["block_ciphers", "utility", "padding"]
-        }
-    }
+    endpoints = {}
 
     router = APIRouter(
         prefix="/plugins"

@@ -15,17 +15,13 @@ class Plugin():
     dependencies = []
     # API endpoints contained in the plugin
     # should contain the URI and relevant tags so they can be discovered / loaded by the frontend
-    # tags are 
-    endpoints = {
-        "example1": {
-            "uri": "/plugins/example1",
-            "tags": ["example"]
-        },
-        "example2": {
-            "uri": "/plugins/example2",
-            "tags": ["example", "example_visualizer"]
+    # tags determine where the URLs might be loaded in the frontend
+    endpoints = [
+        {
+            "uri": "/example",
+            "tag": "homepage"
         }
-    }
+    ]
 
     # Instantiate router instance, all plugins are prefixed with at least /plugins
     router = APIRouter(
