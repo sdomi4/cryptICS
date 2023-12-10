@@ -20,6 +20,7 @@ app = FastAPI()
 
 _plugin_info = {}
 _homepage = []
+_navbar = {}
 for plugin in plugins:
     _plugin_info[plugin] = {
         "endpoints": {},
@@ -47,13 +48,24 @@ for plugin in _plugins:
                 print("Dependency", dependency, "not found, not registering endpoints for", plugin.name)
                 dependencies = False
     if plugin.endpoints:
+        print(plugin.endpoints)
         for endpoint in plugin.endpoints:
-            _plugin_info[plugin.name]["endpoints"][endpoint["tag"]] = endpoint["uri"]
+            if endpoint["tag"] not in _plugin_info[plugin.name]["endpoints"]:
+                _plugin_info[plugin.name]["endpoints"][endpoint["tag"]] = []
+            _plugin_info[plugin.name]["endpoints"][endpoint["tag"]].append(endpoint["uri"])
             if endpoint["tag"] == "homepage":
                 _homepage.append(endpoint)
+            elif endpoint["tag"] == "navbar":
+                if plugin.name not in _navbar.keys():
+                    _navbar[plugin.name] = []
+                _navbar[plugin.name].append(endpoint)
+
+
     plugin_register = plugin.register()
     if plugin_register and not dependencies == False:
         app.include_router(plugin_register)
+
+print(_navbar)
 
 @app.get("/")
 def root():
@@ -66,3 +78,10 @@ def plugins():
 @app.get("/plugins/homepage", response_model=list)
 def homepage():
     return _homepage
+
+@app.get("/plugins/navbar/{plugin}")
+def navbar(plugin: str):
+    print(plugin)
+    return _navbar["plugins."+plugin]
+                
+        

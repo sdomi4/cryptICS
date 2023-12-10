@@ -1,3 +1,4 @@
+/** @type {import('./$types').PageServerLoad} */
 export async function load({ params }) {
     const apiResponse = await fetch('http://localhost:8000/plugins/homepage');
     const homepageInfo = await apiResponse.json()

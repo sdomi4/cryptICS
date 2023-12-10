@@ -7,6 +7,13 @@
 </script>
 
 <style>
+  
+
+  body {
+    flex-grow: 1;
+    padding-top: 100px;
+  }
+
   table, th, td {
     border: 1px solid black;
     border-collapse: collapse;
@@ -41,7 +48,7 @@
     <button type="submit">Submit</button>
   </form>
 
-
+<body>
   <div class="subgroupcontainer">
   {#each subgroups as subgroup}
     {@const order = Object.keys(subgroup)}
@@ -67,5 +74,6 @@
         {/each}
       </table>
     </div>
-  {/each}
-</div>
+    {/each}
+  </div>
+</body>

@@ -16,10 +16,25 @@ class Plugin():
     # API endpoints contained in the plugin
     # should contain the URI and relevant tags so they can be discovered / loaded by the frontend
     # tags determine where the URLs might be loaded in the frontend
+    #
+    # predefined tags:
+    # - homepage: the starting point, dynamically added to the front page (with the extra field "description" for the text on the home page)
+    # - navbar: the subpages of the module, dynamically added to the navbar
+    #
+    # tags can be added as needed for the subpages
     endpoints = [
         {
             "uri": "/example",
-            "tag": "homepage"
+            "tag": "homepage",
+            "description": "Group Theory"
+        },
+        {
+            "uri": "/example/learn",
+            "tag": "navbar"
+        },
+        {
+            "uri": "/example/practice",
+            "tag": "navbar"
         }
     ]
 

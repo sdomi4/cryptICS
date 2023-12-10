@@ -19,9 +19,24 @@ class Plugin():
     dependencies = None
     endpoints = [
         {
-            "uri": "/subgroups",
+            "uri": "/plugins/subgroups",
             "tag": "homepage",
             "description": "Group Theory"
+        },
+        {
+            "uri": "/plugins/subgroups/learn",
+            "tag": "navbar",
+            "description": "Learn"
+        },
+        {
+            "uri": "/plugins/subgroups/practice",
+            "tag": "navbar",
+            "description": "Practice"
+        },
+        {
+            "uri": "/plugins/subgroups/calculate",
+            "tag": "navbar",
+            "description": "Calculate"
         }
     ]
 
