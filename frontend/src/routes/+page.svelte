@@ -2,8 +2,16 @@
     export let data;
     import logo from '../images/hslulogo.svg'
     import Footer from './Footer.svelte'
+    import de from './locales/de.json'
+    import en from './locales/en.json'
     console.log(data);
     const plugins = data?.body || []
+
+    let language = en;
+
+    function changeLanguage() {
+        language = language === en ? de : en;
+}
 </script>
 
 <head>
@@ -68,9 +76,81 @@
         display: block;
         margin: 0 auto 20px;
     }
+
+    .language-toggle {
+        position: relative;
+        float: right;
+        margin: 10px;
+        width: 50px;
+        height: 25px;
+    }
+    .language-toggle input[type="checkbox"] {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .language-toggle label {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0px;
+        background-image: url('../images/uk_flag.svg');
+        background-size: cover;
+        -webkit-transition: .4s;
+        transition: .4s;
+        border-radius: 25px;
+    }
+
+    .language-toggle label:before {
+        position: absolute;
+        content: "";
+        height: 25px;
+        width: 25px;
+        left: -0.5px;
+        bottom: 0px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+        border-radius: 50%;
+    }
+
+    input:checked + label {
+        background-image: url('../images/de_flag.svg');
+    }
+
+    input:checked + label:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+
+    .textdiv {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+
+
 </style>
+<header>
+    <div class="language-toggle">
+        <input type="checkbox" id="lang-toggle" 
+               checked={language === 'de'} 
+               on:change={changeLanguage}>
+        <label for="lang-toggle">
+            <span class="toggle-track"></span>
+        </label>
+    </div>
+</header>
 <body>
 <h1><img src={logo} alt="HSLU Logo" class="logo"/>CryptICS</h1>
+<p class="textdiv">
+    {language.welcometext}
+</p>
 <div class="pluginContainer">
     {#each plugins as plugin}
         <a href={plugin.uri}>
@@ -80,6 +160,9 @@
         </a>
     {/each}
 </div>
+<p class="textdiv">
+    {language.creatortext}
+</p>
 </body>
 
 <footer>
