@@ -1,5 +1,10 @@
 <script>
+  import { title } from '$lib/title';
+  import { onMount } from 'svelte';
 
+  onMount(() => {
+      title.set('Group Theory');
+  });
 </script>
 
 

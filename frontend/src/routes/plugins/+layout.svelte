@@ -1,9 +1,12 @@
 <script>
     import logo from '../../images/hslulogo.svg';
-    import {page} from '$app/stores'
+    import { title } from '$lib/title'
+    import { language } from '$lib/language'
     export let data;
-    let title = $page.url.pathname.split('/')[2];
-    let parent = $page.url.pathname.slice(0, $page.url.pathname.lastIndexOf('/'))
+
+    function toggleLanguage() {
+        language.update(lang => lang === 'en' ? 'de' : 'en');
+    }
 </script>
 
 <head>
@@ -15,23 +18,33 @@
     <div class="logo" href="/">
        <img src={logo} alt="HSLU Logo"/> 
     </div>
-    <nav>
-        <div class = "homediv">
-            <a class="home" href="/">Home</a>
+    <div class = "navcontainer">
+        <nav>
+            <div class = "homediv">
+                <a class="home" href="/">Home</a>
+            </div>
+            <div class="navseparator"></div>
+            
+            <div class = "navdiv">
+                <div class="pagename">{$title}:</div>
+                {#each data.body as link}
+                    <div class = "navlinkcontainer">
+                        <a class="navlink" href={link.uri}>{link.description}</a>
+                    </div>
+                {/each}
+            </div> 
+        </nav>
+        <div class="cryptics">
+            CryptICS
         </div>
-        <div class="navseparator"></div>
-        
-        <div class = "navdiv">
-            <div class="pagename">{title.charAt(0).toUpperCase() + title.slice(1)}:</div>
-            {#each data.body as link}
-                <div class = "navlinkcontainer">
-                    <a class="navlink" href={link.uri}>{link.description}</a>
-                </div>
-            {/each}
-        </div> 
-    </nav>
-    <div class="cryptics">
-        CryptICS
+        <div class="language-toggle">
+            <input type="checkbox" id="lang-toggle" 
+                checked={language === 'de'} 
+                on:change={toggleLanguage}>
+            <label for="lang-toggle">
+                <span class="toggle-track"></span>
+            </label>
+        </div>
     </div>
 </header>
   
@@ -58,8 +71,6 @@
         z-index: 1000;
     }
     .cryptics {
-        margin-top: 8px;
-        margin-left: 30%;
         font-family: "Roboto", sans-serif;
         font-size: 35px;
     }
@@ -87,12 +98,17 @@
         margin-right: 10px;
     }
 
+    .navcontainer {
+        display: flex;
+    }
+
     .navdiv {
         display: flex;
         background-color: #dedcdc;
         border-radius: 5px;
         padding: 25px;
         margin-top: -8px;
+        white-space: nowrap;
     }
 
     .navlinkcontainer {

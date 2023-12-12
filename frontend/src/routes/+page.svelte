@@ -2,16 +2,18 @@
     export let data;
     import logo from '../images/hslulogo.svg'
     import Footer from './Footer.svelte'
+    import { language } from '$lib/language';
     import de from './locales/de.json'
     import en from './locales/en.json'
     console.log(data);
     const plugins = data?.body || []
 
-    let language = en;
+    let translation;
+    $: translation = $language === 'en' ? en : de;
 
-    function changeLanguage() {
-        language = language === en ? de : en;
-}
+    function toggleLanguage() {
+        language.update(lang => lang === 'en' ? 'de' : 'en');
+    }
 </script>
 
 <head>
@@ -140,7 +142,7 @@
     <div class="language-toggle">
         <input type="checkbox" id="lang-toggle" 
                checked={language === 'de'} 
-               on:change={changeLanguage}>
+               on:change={toggleLanguage}>
         <label for="lang-toggle">
             <span class="toggle-track"></span>
         </label>
@@ -149,7 +151,7 @@
 <body>
 <h1><img src={logo} alt="HSLU Logo" class="logo"/>CryptICS</h1>
 <p class="textdiv">
-    {language.welcometext}
+    {translation.welcometext}
 </p>
 <div class="pluginContainer">
     {#each plugins as plugin}
@@ -161,7 +163,7 @@
     {/each}
 </div>
 <p class="textdiv">
-    {language.creatortext}
+    {translation.creatortext}
 </p>
 </body>
 
