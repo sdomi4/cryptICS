@@ -1,5 +1,7 @@
 <script>
     import logo from '../../images/hslulogo.svg';
+    import deFlag from '../../images/de_flag.svg';
+    import ukFlag from '../../images/uk_flag.svg';
     import { title } from '$lib/title'
     import { language } from '$lib/language'
     export let data;
@@ -34,16 +36,18 @@
                 {/each}
             </div> 
         </nav>
-        <div class="cryptics">
-            CryptICS
-        </div>
-        <div class="language-toggle">
-            <input type="checkbox" id="lang-toggle" 
-                checked={language === 'de'} 
-                on:change={toggleLanguage}>
-            <label for="lang-toggle">
-                <span class="toggle-track"></span>
-            </label>
+        <div class="navrighthalf">
+            <div class="cryptics">
+                CryptICS
+            </div>
+            <div class="language-toggle">
+                <input type="checkbox" id="lang-toggle" 
+                    checked={language === 'de'} 
+                    on:change={toggleLanguage}>
+                <label for="lang-toggle" style="background-image: url({$language === 'en' ? ukFlag : deFlag});">
+                    <span class="toggle-track"></span>
+                </label>
+            </div>
         </div>
     </div>
 </header>
@@ -94,31 +98,33 @@
     .pagename {
         font-family: "Roboto", sans-serif;
         font-size: 26px;
-        margin-top: -15px;
         margin-right: 10px;
     }
 
     .navcontainer {
         display: flex;
+        justify-content: space-between;
+        width: 100%;
+        align-items: center;
     }
 
     .navdiv {
         display: flex;
+        align-items: center;
         background-color: #dedcdc;
         border-radius: 5px;
-        padding: 25px;
-        margin-top: -8px;
+        padding: 15px;
+        margin-top: -10px;
         white-space: nowrap;
     }
-
-    .navlinkcontainer {
-        margin-top: -12px;
+    .navlink {
+        margin: 5px;
     }
 
-    .navlink {
-        margin: 15px;
-        padding-top: 5px;
-        padding-bottom: 5px;
+    .navrighthalf {
+        display: flex;
+        align-items: center;
+        margin-right: 5%;
     }
 
     .home {
@@ -158,6 +164,52 @@
         width: 100%;
         box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
         }
+
+    .language-toggle {
+        position: relative;
+        display: block;
+        margin: 10px;
+        width: 50px;
+        height: 25px;
+    }
+    .language-toggle input[type="checkbox"] {
+        opacity: 0;
+        width: 0;
+        height: 0;
+        display: block;
+    }
+
+    .language-toggle label {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0px;
+        background-size: cover;
+        -webkit-transition: .4s;
+        transition: .4s;
+        border-radius: 25px;
+    }
+
+    .language-toggle label:before {
+        position: absolute;
+        content: "";
+        height: 25px;
+        width: 25px;
+        left: -0.5px;
+        bottom: 0px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+        border-radius: 50%;
+    }
+
+    input:checked + label:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }    
 </style>
 
 <slot />
