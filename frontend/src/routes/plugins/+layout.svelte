@@ -1,4 +1,5 @@
 <script>
+    import Footer from '../Footer.svelte';
     import logo from '../../images/hslulogo.svg';
     import deFlag from '../../images/de_flag.svg';
     import ukFlag from '../../images/uk_flag.svg';
@@ -51,9 +52,19 @@
         </div>
     </div>
 </header>
-  
+
+<body>
+<slot />
+</body>
+
+</div>
+
+<footer>
+ <Footer />
+</footer>
+
 <style>
-    html, body {
+    body {
         max-width: 100%;
         overflow-x: hidden;
     }
@@ -155,16 +166,6 @@
         background-color: #8f8f8f;
     }
 
-    footer {
-        background-color: #f9f9f9;
-        padding: 20px;
-        text-align: center;
-        position: relative;
-        bottom: 0;
-        width: 100%;
-        box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
-        }
-
     .language-toggle {
         position: relative;
         display: block;
@@ -211,11 +212,3 @@
         transform: translateX(26px);
     }    
 </style>
-
-<slot />
-
-</div>
-
-<footer>
-
-</footer>

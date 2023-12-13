@@ -2,12 +2,13 @@
     export let data;
     import logo from '../images/hslulogo.svg'
     import Footer from './Footer.svelte'
-    import { language } from '$lib/language';
+    
     import de from './locales/de.json'
     import en from './locales/en.json'
     console.log(data);
     const plugins = data?.body || []
 
+    import { language } from '$lib/language';
     let translation;
     $: translation = $language === 'en' ? en : de;
 
