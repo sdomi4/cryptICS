@@ -1,11 +1,11 @@
 [
     {
-        "id": 0,
+        "id": 1,
         "title": "Definition einer Gruppe",
         "content": "Nach Christoph Paar: \"Eine Gruppe ist eine Menge von Elementen <i>G</i> zusammen mit einer Operation &#8728, die zwei Elemente von <i>G</i> verknüpft.\"<br/>"
     },
     {
-        "id": 1,
+        "id": 2,
         "title": "Eigenschaften einer Gruppe",
         "content": "Eine Gruppe muss folgende Eigenschaften aufweisen:</br><ul><li>Die Ergebnisse der Operation &#8728 müssen <strong>abgeschlossen</strong> sein, also gilt für alle <i>a, b &#8712 G</i> auch <i>a &#8728 b = c &#8712 G</i></li><li>Die Gruppenoperation muss <strong>assoziativ</strong> sein, also gilt für alle <i>a &#8728 (b &#8728 c) = (a &#8728 b) &#8728 c</i> für alle <i>a, b, c &#8712 G</i></li><li>Die Gruppe enthält ein Element <strong>I</strong> <i>&#8712 G</i>, sodass <i>a &#8728 I = I &#8728 a = a</i> für alle <i>a &#8712 G</i>, genannt <strong>neutrales Element</strong> oder <strong>Identität</strong></li><li>Für jedes Element <i>a &#8712 G</i> existiert ein <strong>inverses Element</strong> <i>a<sup>-1</sup> &#8712 G</i> sodass <i>a &#8728 a<sup>-1</sup> = a<sup>-1</sup> &#8728 a = 1</i></li><li>Die Gruppe ist <strong>kommutativ</strong> (oder <strong>abelsch</strong>) wenn für alle <i>a, b &#8712 G</i> auch <i>a &#8728 b = b &#8728 a</i> gilt</li></ul>"
     }

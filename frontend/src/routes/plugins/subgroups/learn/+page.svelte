@@ -6,27 +6,25 @@
     let refs = [];
 
     onMount(() => {
-        console.log(slides)
-        refs = Array(slides.length).fill(slides);
-        console.log(refs)
+        console.log(slides.length)
     });
 
-    function scrollToSlide(index) {
-        console.log(index)
-        const element = refs[index];
-        if (element) {
-            element.scrollIntoView({ behavior: 'smooth' });
-        }
+    function scrollToSlide({ target }) {
+        const el = document.querySelector(target.getAttribute('href'));
+		if (!el) return;
+        el.scrollIntoView({
+            behavior: 'smooth'
+        });
     }
 </script>
 
 <body>
-    {#each slides as slide, index (slide.id)}
-        <section bind:this={refs[index]}>
+    {#each slides as slide}
+        <section id="slide-{slide.id}">
             <h2>{slide.title}</h2>
             <div>{@html slide.content}</div>
-            {#if index < slides.length - 1}
-                <button on:click={() => scrollToSlide(index + 1)}>Next</button>
+            {#if slide.id < slides.length}
+                <a href="#slide-{slide.id+1}" on:click|preventDefault={scrollToSlide}>Next</a>
             {/if}
         </section>
     {/each}
