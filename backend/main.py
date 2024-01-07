@@ -62,7 +62,7 @@ for plugin in _plugins:
 
 
     plugin_register = plugin.register()
-    if plugin_register and not dependencies == False:
+    if plugin_register and dependencies:
         app.include_router(plugin_register)
 
 print(_navbar)
