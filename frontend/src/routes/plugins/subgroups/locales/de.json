@@ -1,5 +1,8 @@
 {
     "title": "Abstrakte Algebra / Gruppentheorie",
+	"learn": "Theorie",
+	"practice": "Üben",
+	"calculate": "Berechnen",
 	"introtext": "Abstrakte Algebra, spezifisch das Teilgebiet Gruppentheorie bildet einen Baustein für Kryptographie. Die Gruppentheorie findet Anwendung in verschiedenen Kryptoverfahren, die auf dem diskreten Logarithmusproblem beruhen, beispielsweise Diffie-Hellmann, Elgamal, und Elliptische Kurven.",
 	"learntext": "Um die Theorie zu lernen:",
 	"practicetext": "Um die Berechnungen zu üben:",

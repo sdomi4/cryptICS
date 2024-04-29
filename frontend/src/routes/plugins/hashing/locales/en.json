@@ -1,0 +1,9 @@
+{
+    "title": "Hashing",
+    "diffusiontitle": "Diffusion",
+    "experimenttitle": "Experiment",
+    "introtext": "Hash functions map elements of a \"large\" set into a \"small\" one. In cryptography, they are primarily used for integrity checks.",
+    "learn": "Hash functions are introduced in the script in chapter 5.4, and in CP-D in chapter 11.",
+    "diffusion": "The diffusion property seen in hash functions",
+    "experiment": "Experiment with different hash functions"
+}

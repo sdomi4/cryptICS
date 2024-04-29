@@ -6,26 +6,16 @@ from util_internal.conversions import bytearray_to_blocks
 # To export API endpoints
 from fastapi import APIRouter
 from pydantic import BaseModel
-
-class BlockRequest(BaseModel):
-    data: str
-    encoding: str
-    block_size: int
-
-class BlockResponse(BaseModel):
-    data: list[bytes]
+import binascii
 
 class BinaryRequest(BaseModel):
-    data: list[bytes]
+    data: str
 
-class BinaryResponse(BaseModel):
-    binary: str
+class HexRequest(BaseModel):
+    data: str
 
-class BinaryBlockRequest(BaseModel):
-    data: list[bytes]
-
-class BinaryBlockResponse(BaseModel):
-    data: list[str]
+class BothRequest(BaseModel):
+    data: str
 
 # All logic should be contained in the Plugin class, for plugin discovery/import
 class Plugin():
@@ -50,23 +40,20 @@ class Plugin():
         # return None
         return self.router
     
-    def _bytearray_to_blocks(data: bytearray, block_size: int) -> list:
-        return [data[i:i+block_size] for i in range(0, len(data), block_size)]
-    
-    # @router.post("/binaryString", response_model=BinaryResponse)
-    # def get_binary_string(binary_request: BinaryRequest):
-    #     binary_string = ' '.join(f'{byte:08b}' for byte in binary_request.data)
-    #     return binary_string
-    
-    # @router.post("/blocksToBinary", response_description=BinaryBlockResponse)
-    # def blocks_to_binary(binary_block_request: BinaryBlockRequest):
-    #     binary_blocks = []
-    #     return binary_blocks
-    
-    # @router.post("/toBlocks", response_model=BlockResponse)
-    # def string_to_blocks(block_request: BlockRequest):
-    #     data = bytes(block_request.data, block_request.encoding)
-    #     blocks = bytearray_to_blocks(data, block_request.block_size)
-    #     for block in blocks:
-    #         print(block.hex())
-    #     return {"data": blocks}
+
+
+    @router.post("/strToBinary")
+    def run(binary_request: BinaryRequest):
+        return ''.join(format(ord(i), '08b') for i in binary_request.data)
+
+    @router.post("/hexToBinary")
+    def run(hex_request: HexRequest):
+        return "{0:08b}".format(int(hex_request.data, 16)) 
+    @router.post("/strToBoth")
+    def run(both_request: BothRequest):
+        binary = ''.join(format(ord(i), '08b') for i in both_request.data)
+        response = {
+            "binary": binary,
+            "hex": binascii.hexlify(bytes(both_request.data, encoding="utf8"))
+        } 
+        return response

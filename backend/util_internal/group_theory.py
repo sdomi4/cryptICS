@@ -1,7 +1,8 @@
 import operator
+from math import gcd
 
 class Group():
-    def __init__(self, elements: set(), op: operator, mod: int):
+    def __init__(self, elements: set, op: operator, mod: int):
         self.elements = elements
         self.operation = op
         self.modulus = mod
@@ -18,7 +19,6 @@ class Group():
             for b in self.elements:
                 result = self._mod_operation(a, b)
                 if result not in self.elements:
-                    # print(a, b)
                     self.why_not_group = [1, a, b]
                     return False
 
@@ -26,6 +26,8 @@ class Group():
         for a in self.elements:
             for b in self.elements:
                 for c in self.elements:
+                    if c == a or c == b:
+                        continue
                     if self._mod_operation(self._mod_operation(a, b), c) != self._mod_operation(a, self._mod_operation(b, c)):
                         self.why_not_group = [2, a, b]
                         return False
@@ -113,6 +115,36 @@ class Group():
             power += 1
 
         return power
+    
+    def get_row_orders(self, multiplication_table):
+        row_orders = {}
+        for row in multiplication_table:
+            orders = set( value for value in multiplication_table[row].values())
+            row_orders[row] = len(orders)
+
+        return row_orders
+    
+    def get_possible_subgroups(self):
+        prime_factors = self._prime_factors()
+        # append order + 1 for trivial groups, then sort
+        prime_factors.append(1)
+        prime_factors.append(self.get_order())
+        return sorted(prime_factors)
+    
+    def _prime_factors(self):
+        prime_factors = []
+        divisor = 2
+
+        n = self.get_order()
+
+        while divisor <= n:
+            if n % divisor == 0:
+                prime_factors.append(divisor)
+                n = n / divisor
+            else:
+                divisor += 1
+        
+        return prime_factors
 
     def generate_multiplication_table(self):
         table = {}
@@ -121,6 +153,15 @@ class Group():
             for b in self.elements:
                 result = self._mod_operation(a, b)
                 row[b] = result
+            table[a] = row
+        return table
+    
+    def generate_exponential_table(self):
+        table = {}
+        for a in self.elements:
+            row = {}
+            for b in self.elements:
+                row[b] = pow(a, b) % self.modulus
             table[a] = row
         return table
 

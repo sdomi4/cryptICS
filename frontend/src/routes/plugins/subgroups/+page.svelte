@@ -1,13 +1,22 @@
 <script>
+  import '../../../style/globalStyle.css'
+  
   import { title } from '$lib/title';
   import { onMount } from 'svelte';
 
   import de from './locales/de.json';
   import en from './locales/en.json';
-
+  import { navLinks } from '$lib/stores'
   import { language } from '$lib/language';
   let translation;
-  $: translation = $language === 'en' ? en : de;
+  $: {
+        translation = $language === 'en' ? en : de;
+        navLinks.set([
+            { description: translation.learn, uri: "/plugins/subgroups/learn" },
+            { description: translation.practice, uri: "/plugins/subgroups/practice"},
+            { description: translation.calculate, uri: "/plugins/subgroups/calculate"}
+        ]);
+    }
 
 
   onMount(() => {

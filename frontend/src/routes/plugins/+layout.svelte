@@ -3,9 +3,11 @@
     import logo from '../../images/hslulogo.svg';
     import deFlag from '../../images/de_flag.svg';
     import ukFlag from '../../images/uk_flag.svg';
+
     import { title } from '$lib/title'
     import { language } from '$lib/language'
-    export let data;
+
+    import { navLinks } from '$lib/stores.js';
 
     function toggleLanguage() {
         language.update(lang => lang === 'en' ? 'de' : 'en');
@@ -30,7 +32,7 @@
             
             <div class = "navdiv">
                 <div class="pagename">{$title}:</div>
-                {#each data.body as link}
+                {#each $navLinks as link}
                     <div class = "navlinkcontainer">
                         <a class="navlink" href={link.uri}>{link.description}</a>
                     </div>

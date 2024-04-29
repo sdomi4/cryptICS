@@ -1,0 +1,9 @@
+{
+    "title": "Hashfunktionen",
+    "diffusiontitle": "Diffusion",
+    "experimenttitle": "Experimentieren",
+    "introtext": "Hashfunktionen bilden Elemente einer \"grossen\" Menge in eine \"kleine\" ab. Sie dienen in der Kryptographie primär der Integritätsprüfung.",
+    "learn": "Hashfunktionen werden im Skript, Kapitel 5.4 sowie in CP-D, Kapitel 11 behandelt.",
+    "diffusion": "Das Prinzip der Diffusion anhand von Hashfunktionen",
+    "experiment": "Experimentieren mit verschiedenen Hashfunktionen"
+}
