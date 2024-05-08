@@ -8,9 +8,46 @@ from fastapi import APIRouter, HTTPException
 import Crypto.Hash
 from pydantic import BaseModel
 
+import Crypto.Hash.BLAKE2b
+import Crypto.Hash.BLAKE2s
+import Crypto.Hash.CMAC
+import Crypto.Hash.cSHAKE128
+import Crypto.Hash.cSHAKE256
+import Crypto.Hash.HMAC
+import Crypto.Hash.KangarooTwelve
+import Crypto.Hash.keccak
+import Crypto.Hash.KMAC128
+import Crypto.Hash.KMAC256
+import Crypto.Hash.MD2
+import Crypto.Hash.MD4
+import Crypto.Hash.MD5
+import Crypto.Hash.Poly1305
+import Crypto.Hash.RIPEMD160
+import Crypto.Hash.SHA
+import Crypto.Hash.SHA1
+import Crypto.Hash.SHA224
+import Crypto.Hash.SHA256
+import Crypto.Hash.SHA384
+import Crypto.Hash.SHA3_224
+import Crypto.Hash.SHA3_256
+import Crypto.Hash.SHA3_384
+import Crypto.Hash.SHA3_512
+import Crypto.Hash.SHA512
+import Crypto.Hash.SHAKE128
+import Crypto.Hash.SHAKE256
+import Crypto.Hash.TupleHash128
+import Crypto.Hash.TupleHash256
+
+
 class HashRequest(BaseModel):
     algorithm: str
     data: str
+
+class HashGetResponse(BaseModel):
+    algorithms: list[str]
+
+class HashPostResponse(BaseModel):
+    hash: str
 
 # All logic should be contained in the Plugin class, for plugin discovery/import
 class Plugin():
@@ -53,7 +90,7 @@ class Plugin():
 
     
     # Add any API endpoints and logic methods as needed for the plugin
-    @router.post("/hash", response_model=[])
+    @router.post("/hash", response_model=HashPostResponse)
     def run(hash_request: HashRequest):
         algorithm = hash_request.algorithm.lower()
         match algorithm:
@@ -118,14 +155,9 @@ class Plugin():
             case _:
                 raise HTTPException(status_code=404, detail="No such algorithm")
         h.update(hash_request.data.encode())
-        return h.hexdigest()
+        return {"hash": h.hexdigest()}
     
-    @router.get("/algorithms", response_model=[])
-    def run():
-        default_hashing_algorithms = ["SHA1", "SHA256", "MD5", "Poly1305"]
-        return default_hashing_algorithms
-    
-    @router.get("/allalgorithms", response_model=[])
+    @router.get("/hash", response_model=HashGetResponse)
     def run():
         hashing_algorithms = ["BLAKE2b", "BLAKE2s", "CMAC", "cSHAKE128", "cSHAKE256", "HMAC", "KangarooTwelve", "keccak", "KMAC128", "KMAC256", "MD2", "MD4", "MD5", "Poly1305", "RIPEMD160", "SHA", "SHA1", "SHA224", "SHA256", "SHA384", "SHA3_224", "SHA3_256", "SHA3_384", "SHA3_512", "SHA512", "SHAKE128", "SHAKE256", "TupleHash128", "TupleHash256"]
-        return hashing_algorithms
+        return {"algorithms": hashing_algorithms}

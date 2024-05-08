@@ -1,7 +1,5 @@
-<!-- Form.svelte -->
 <script>
     export let form;
-    console.log(form)
     let subgroups = form?.body.subgroups || []
     subgroups.sort(Object.keys);
 </script>
@@ -41,14 +39,14 @@
   }
 </style>
 
+<body>
+  <div class="bodycontainer">
   <form method="POST">
     <input name="elements" type="text" placeholder="Elements (comma-separated)">
     <input name="op" type="text" placeholder="Operation">
     <input name="mod" type="number" placeholder="Modulus">
     <button type="submit">Submit</button>
   </form>
-
-<body>
   <div class="subgroupcontainer">
   {#each subgroups as subgroup}
     {@const order = Object.keys(subgroup)}
@@ -75,5 +73,6 @@
       </table>
     </div>
     {/each}
+  </div>
   </div>
 </body>

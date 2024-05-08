@@ -11,11 +11,24 @@ import binascii
 class BinaryRequest(BaseModel):
     data: str
 
+class BinaryResponse(BaseModel):
+    data: str
+    binary: str
+
 class HexRequest(BaseModel):
     data: str
 
+class HexResponse(BaseModel):
+    data: str
+    hex: str
+
 class BothRequest(BaseModel):
     data: str
+
+class BothResponse(BaseModel):
+    data: str
+    binary: str
+    hex: str
 
 # All logic should be contained in the Plugin class, for plugin discovery/import
 class Plugin():
@@ -42,14 +55,25 @@ class Plugin():
     
 
 
-    @router.post("/strToBinary")
+    @router.post("/strToBinary", response_model=BinaryResponse)
     def run(binary_request: BinaryRequest):
-        return ''.join(format(ord(i), '08b') for i in binary_request.data)
-
-    @router.post("/hexToBinary")
+        binary = ''.join(format(ord(i), '08b') for i in binary_request.data)
+        response = {
+            "data": binary_request.data,
+            "binary": binary
+        }
+        return response
+    
+    @router.post("/hexToBinary", response_model=BinaryResponse)
     def run(hex_request: HexRequest):
-        return "{0:08b}".format(int(hex_request.data, 16)) 
-    @router.post("/strToBoth")
+        binary = "{0:08b}".format(int(hex_request.data, 16)) 
+        response = {
+            "data": hex_request.data,
+            "binary": binary
+        }
+        return response
+    
+    @router.post("/strToBoth", response_model=BothResponse)
     def run(both_request: BothRequest):
         binary = ''.join(format(ord(i), '08b') for i in both_request.data)
         response = {
