@@ -4,7 +4,7 @@
     import { title } from '$lib/title';
     import { navLinks } from '$lib/stores.js'
     import { onMount } from 'svelte';
-    import { writable } from 'svelte/store';
+    import { enhance } from '$app/forms';
   
     import de from './locales/de.json';
     import en from './locales/en.json';
@@ -12,6 +12,7 @@
     import { language } from '$lib/language';
 	import Blockviewer from '../../../../lib/CryptICSVisualizer.svelte';
     import { savedHashData } from '$lib/stores.js';
+    import { savedData } from '$lib/stores.js';
 
     export let form;
     export let data;
@@ -19,7 +20,6 @@
     let options = ["MD5", "SHA256", "SHA512"];
     let selectedOption;
     let showAllAlgorithms = false;
-    let savedData = false;
 
     let showDiff = false;
 
@@ -32,11 +32,15 @@
     }
 
     let hashData = form?.body || [];
-    if (hashData && !savedData) {
+    if ($savedHashData.data) {
+        console.log("saved data exists");
+    } else if (hashData.data) {
+        console.log("no saved data exists, but data is present in form");
         savedHashData.set(hashData);
+    } else {
+        console.log("no saved data exists and no data is present in form");
     }
 
-    console.log(hashData);
     let translation;
     $: {
         translation = $language === 'en' ? en : de;
@@ -49,15 +53,13 @@
   
     onMount(() => {
         title.set('Hashing');
-
-
     });
 </script>
 
 <body>
     <div class="bodycontainer">
         <div class="hashcontainer">
-            {#if !hashData.data}
+            {#if !$savedHashData.data}
             <form method="POST">
                 <input name="data" type="text" placeholder="Input to be hashed">
                 <select name="algorithm" bind:value={selectedOption}>
@@ -71,7 +73,7 @@
                 {showAllAlgorithms ? 'Show Less' : 'Show More'}
             </button>
             {/if}
-            {#if hashData.data}
+            {#if $savedHashData.data}
                 <Blockviewer hexdata={$savedHashData.data}, binarydata={$savedHashData.binary} />
                 <button on:click={toggleShowDiff}>
                     {showDiff ? 'Hide' : 'Modify'}
@@ -89,9 +91,11 @@
                     </select>
                     <button type="submit">Submit</button>
                 </form>
-
             </div>
         {/if}
-        
+
+        {#if $savedData}
+            <h1>pp</h1>
+        {/if}
     </div>
 </body>

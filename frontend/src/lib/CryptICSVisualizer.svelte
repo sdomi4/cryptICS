@@ -13,7 +13,6 @@
     }
 
     let binaryBlocks = formatData(binarydata);
-    console.log(binaryBlocks);
   </script>
   
   <div class="datacontainer">
