@@ -7,6 +7,7 @@ from util_internal.conversions import bytearray_to_blocks
 from fastapi import APIRouter
 from pydantic import BaseModel
 import binascii
+import backend.util_internal.conversions as conversions
 
 class BinaryRequest(BaseModel):
     data: str
@@ -57,7 +58,7 @@ class Plugin():
 
     @router.post("/strToBinary", response_model=BinaryResponse)
     def run(binary_request: BinaryRequest):
-        binary = ''.join(format(ord(i), '08b') for i in binary_request.data)
+        binary = conversions.str_to_binary(binary_request.data)
         response = {
             "data": binary_request.data,
             "binary": binary
@@ -66,7 +67,7 @@ class Plugin():
     
     @router.post("/hexToBinary", response_model=BinaryResponse)
     def run(hex_request: HexRequest):
-        binary = "{0:08b}".format(int(hex_request.data, 16)) 
+        binary = conversions.hex_to_binary(hex_request.data)
         response = {
             "data": hex_request.data,
             "binary": binary
@@ -75,7 +76,7 @@ class Plugin():
     
     @router.post("/strToBoth", response_model=BothResponse)
     def run(both_request: BothRequest):
-        binary = ''.join(format(ord(i), '08b') for i in both_request.data)
+        binary = conversions.str_to_binary(both_request.data)
         response = {
             "binary": binary,
             "hex": binascii.hexlify(bytes(both_request.data, encoding="utf8"))

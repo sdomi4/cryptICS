@@ -1,5 +1,13 @@
 {
     "title": "Hashing",
     "diffusiontitle": "Diffusion",
-    "experimenttitle": "Experiment"
+    "experimenttitle": "Experiment",
+    "hashviewer": {
+        "hextext": "",
+        "binarytext": ""
+    },
+    "diffusionviewer": {
+        "hextext": "",
+        "binarytext": ""
+    }
 }

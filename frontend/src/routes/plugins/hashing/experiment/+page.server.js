@@ -1,7 +1,7 @@
 export const actions = {
     default: async ({ request }) => {
       const data = await request.formData()
-      const hashResponse = await fetch('http://localhost:8000/plugins/hash/diffusion', {
+      const hashResponse = await fetch('http://localhost:8000/plugins/hash', {
         method: 'post',
         headers: {
           'Content-Type': 'application/json',
@@ -14,11 +14,21 @@ export const actions = {
       });
     
       const HashResult = await hashResponse.json();
-      console.log(HashResult);
-
+      // api call to convert hexdigest to binary for display
+      const binaryResponse = await fetch('http://localhost:8000/plugins/hexToBinary', {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+          'accept': 'application/json'
+        },
+        body: JSON.stringify({
+          "data": HashResult.hash
+        })
+      });
+      const binaryResult = await binaryResponse.json();
       return {
         status: 200,
-        body: HashResult
+        body: binaryResult
       };
     }
   };

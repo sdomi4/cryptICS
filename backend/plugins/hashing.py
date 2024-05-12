@@ -5,41 +5,16 @@
 
 # To export API endpoints
 from fastapi import APIRouter, HTTPException
-import Crypto.Hash
+from backend.util_internal.hasher import create_hash
+from backend.util_internal.conversions import hex_to_binary
 from pydantic import BaseModel
-
-import Crypto.Hash.BLAKE2b
-import Crypto.Hash.BLAKE2s
-import Crypto.Hash.CMAC
-import Crypto.Hash.cSHAKE128
-import Crypto.Hash.cSHAKE256
-import Crypto.Hash.HMAC
-import Crypto.Hash.KangarooTwelve
-import Crypto.Hash.keccak
-import Crypto.Hash.KMAC128
-import Crypto.Hash.KMAC256
-import Crypto.Hash.MD2
-import Crypto.Hash.MD4
-import Crypto.Hash.MD5
-import Crypto.Hash.Poly1305
-import Crypto.Hash.RIPEMD160
-import Crypto.Hash.SHA
-import Crypto.Hash.SHA1
-import Crypto.Hash.SHA224
-import Crypto.Hash.SHA256
-import Crypto.Hash.SHA384
-import Crypto.Hash.SHA3_224
-import Crypto.Hash.SHA3_256
-import Crypto.Hash.SHA3_384
-import Crypto.Hash.SHA3_512
-import Crypto.Hash.SHA512
-import Crypto.Hash.SHAKE128
-import Crypto.Hash.SHAKE256
-import Crypto.Hash.TupleHash128
-import Crypto.Hash.TupleHash256
-
+import random
 
 class HashRequest(BaseModel):
+    algorithm: str
+    data: str
+
+class DiffusionRequest(BaseModel):
     algorithm: str
     data: str
 
@@ -48,6 +23,13 @@ class HashGetResponse(BaseModel):
 
 class HashPostResponse(BaseModel):
     hash: str
+
+class DiffusionResponse(BaseModel):
+    input: str
+    hash: str
+    hash_binary: str
+    modified_hash: str
+    modified_hash_binary: str
 
 # All logic should be contained in the Plugin class, for plugin discovery/import
 class Plugin():
@@ -91,73 +73,39 @@ class Plugin():
     
     # Add any API endpoints and logic methods as needed for the plugin
     @router.post("/hash", response_model=HashPostResponse)
-    def run(hash_request: HashRequest):
+    def create_hash(hash_request: HashRequest):
         algorithm = hash_request.algorithm.lower()
-        match algorithm:
-            case "blake2b":
-                h = Crypto.Hash.BLAKE2b.new()
-            case "blake2s":
-                h = Crypto.Hash.BLAKE2s.new()
-            case "cmac":
-                h = Crypto.Hash.CMAC.new()
-            case "cshake128":
-                h = Crypto.Hash.cSHAKE128.new()
-            case "cshake256":
-                h = Crypto.Hash.cSHAKE256.new()
-            case "hmac":
-                h = Crypto.Hash.HMAC.new()
-            case "kangarootwelve":
-                h = Crypto.Hash.KangarooTwelve.new()
-            case "keccak":
-                h = Crypto.Hash.keccak.new()
-            case "kmac128":
-                h = Crypto.Hash.KMAC128.new()
-            case "kmac256":
-                h = Crypto.Hash.KMAC256.new()
-            case "md2":
-                h = Crypto.Hash.MD2.new()
-            case "md4":
-                h = Crypto.Hash.MD4.new()
-            case "md5":
-                h = Crypto.Hash.MD5.new()
-            case "poly1305":
-                h = Crypto.Hash.Poly1305.new()
-            case "ripemd" | "ripemd160":
-                h = Crypto.Hash.RIPEMD160.new()
-            case "sha":
-                h = Crypto.Hash.SHA.new()
-            case "sha1":
-                h = Crypto.Hash.SHA1.new()
-            case "sha224":
-                h = Crypto.Hash.SHA224.new()
-            case "sha256":
-                h = Crypto.Hash.SHA256.new()
-            case "sha384":
-                h = Crypto.Hash.SHA384.new()
-            case "sha3_224":
-                h = Crypto.Hash.SHA3_224.new()
-            case "sha3_256":
-                h = Crypto.Hash.SHA3_256.new()
-            case "sha3_384":
-                h = Crypto.Hash.SHA3_384.new()
-            case "sha3_512":
-                h = Crypto.Hash.SHA3_512.new()
-            case "sha512":
-                h = Crypto.Hash.SHA512.new()
-            case "shake128":
-                h = Crypto.Hash.SHAKE128.new()
-            case "shake256":
-                h = Crypto.Hash.SHAKE256.new()
-            case "tuplehash128":
-                h = Crypto.Hash.TupleHash128.new()
-            case "tuplehash256":
-                h = Crypto.Hash.TupleHash256.new()
-            case _:
-                raise HTTPException(status_code=404, detail="No such algorithm")
-        h.update(hash_request.data.encode())
-        return {"hash": h.hexdigest()}
+        h = create_hash(algorithm=algorithm, data=hash_request.data)
+        if h is None:
+            raise HTTPException(status_code=404, detail="No such algorithm")
+        return {"hash": h}
     
     @router.get("/hash", response_model=HashGetResponse)
-    def run():
+    def algorithms():
         hashing_algorithms = ["BLAKE2b", "BLAKE2s", "CMAC", "cSHAKE128", "cSHAKE256", "HMAC", "KangarooTwelve", "keccak", "KMAC128", "KMAC256", "MD2", "MD4", "MD5", "Poly1305", "RIPEMD160", "SHA", "SHA1", "SHA224", "SHA256", "SHA384", "SHA3_224", "SHA3_256", "SHA3_384", "SHA3_512", "SHA512", "SHAKE128", "SHAKE256", "TupleHash128", "TupleHash256"]
         return {"algorithms": hashing_algorithms}
+
+    @router.post("/hash/diffusion", response_model=DiffusionResponse)
+    def diffusion(diffusion_request: DiffusionRequest):
+        algorithm = diffusion_request.algorithm.lower()
+        data = diffusion_request.data
+        print(diffusion_request)
+        h = create_hash(algorithm=algorithm, data=data)
+        if h is None:
+            raise HTTPException(status_code=404, detail="No such algorithm")
+        
+        index = random.randint(0, len(data) - 1)
+        flipped_data = data[:index] + chr(ord(data[index]) ^ 1) + data[index+1:]
+
+        h_modified = create_hash(algorithm=algorithm, data=flipped_data)
+        if h_modified is None:
+            raise HTTPException(status_code=404, detail="No such algorithm")
+
+        return {
+            "input": data,
+            "hash": h,
+            "hash_binary": hex_to_binary(h),
+            "modified_hash": h_modified,
+            "modified_hash_binary": hex_to_binary(h_modified)
+        }
+

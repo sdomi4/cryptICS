@@ -1,5 +1,14 @@
 {
     "title": "Hashfunktionen",
     "diffusiontitle": "Diffusion",
-    "experimenttitle": "Experimentieren"
+    "experimenttitle": "Experimentieren",
+    "hashviewer": {
+        "inputtext": "Aus dem eingegebenen Text: ",
+        "hextext": "entsteht der folgende Hashwert (hexadezimal): ",
+        "binarytext": "In Binär dargestellt:"
+    },
+    "diffusionviewer": {
+        "hextext": "",
+        "binarytext": ""
+    }
 }
