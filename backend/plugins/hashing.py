@@ -48,11 +48,11 @@ class Plugin():
     #
     # tags can be added as needed for the subpages
     endpoints = [
-        {
-            "uri": "/plugins/hashing",
-            "tag": "homepage",
-            "description": "Hashing"
-        }
+        # {
+        #     "uri": "/plugins/hashing",
+        #     "tag": "homepage",
+        #     "description": "Hashing"
+        # }
     ]
 
     
@@ -66,7 +66,7 @@ class Plugin():
     # method called during plugin discovery to register API endpoints
     # return None if no endpoints should be registered
     def register(self):
-        # return None
+        return None
         return self.router
     
 

@@ -1,8 +1,7 @@
 import binascii
 
-
-def bytearray_to_blocks(data: bytearray, block_size: int) -> list:
-        return [data[i:i+block_size] for i in range(0, len(data), block_size)]
+def binary_to_blocks(binary_data: str, block_size: int) -> list[str]:
+    return [binary_data[i:i+block_size] for i in range(0, len(binary_data), block_size)]
 
 def hex_to_binary(hex_data: str) -> str:
     return "{0:08b}".format(int(hex_data, 16))

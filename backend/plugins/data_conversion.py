@@ -2,7 +2,7 @@
 #   Example for a new plugin with needed  #
 #   class / methods for plugin discovery  #
 ###########################################
-from util_internal.conversions import bytearray_to_blocks
+
 # To export API endpoints
 from fastapi import APIRouter
 from pydantic import BaseModel
