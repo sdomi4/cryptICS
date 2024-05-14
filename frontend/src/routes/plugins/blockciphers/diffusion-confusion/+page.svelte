@@ -4,97 +4,105 @@
     import { title } from '$lib/title';
     import { navLinks } from '$lib/stores.js'
     import { onMount } from 'svelte';
-    import { fly } from 'svelte/transition';
-    import { quintOut } from 'svelte/easing';
   
     import de from './locales/de.json';
     import en from './locales/en.json';
   
     import { language } from '$lib/language';
-	import Blockviewer from '../../../../lib/CryptICSVisualizer.svelte';
+	import BlockViewer from '../../../../lib/BlockViewer.svelte';
+    import ComparisonBlockViewer from '../../../../lib/ComparisonBlockViewer.svelte';
+    import EncryptionViewer from '../../../../lib/EncryptionViewer.svelte';
 
-    export let form;
     export let data;
-    let allOptions = data.body.algorithms;
-    let options = ["MD5", "SHA256", "SHA512"];
-    let selectedOption;
-    let showAllAlgorithms = false;
-    let showDiff = false;
+    console.log(data);
 
-    function toggleShowAll() {
-        showAllAlgorithms = !showAllAlgorithms;
+    let cleartext = data.body.cleartext;
+    let key = data.body.key;
+    let ciphertext = data.body.ciphertext;
+
+    let diffusionCleartext = data.body.diffusion.cleartext;
+    let confusionKey = data.body.confusion.key;
+
+    let diffusionCiphertext = data.body.diffusion.ciphertext;
+    let confusionCiphertext = data.body.confusion.ciphertext;
+
+
+
+    let showDiffusion = false;
+    let showConfusion = false;
+
+    function toggleShowConfusion() {
+        showConfusion = !showConfusion;
+        if (showDiffusion) {
+            showDiffusion = false;
+        }
     }
 
-    function toggleShowDiff() {
-        showDiff = !showDiff;
+    function toggleShowDiffusion() {
+        showDiffusion = !showDiffusion;
+        if (showConfusion) {
+            showConfusion = false;
+        }
     }
-
-    let hashData = form?.body || [];
 
     let translation;
     $: {
         translation = $language === 'en' ? en : de;
         navLinks.set([
-            { description: translation.diffusiontitle, uri: "/plugins/hashing/diffusion" },
-            { description: translation.experimenttitle, uri: "/plugins/hashing/experiment"}
+            { description: translation.diffconftitle, uri: "/plugins/blockciphers/diffusion-confusion" },
+            { description: translation.ciphermodetitle, uri: "/plugins/blockciphers/ciphermodes"},
+            { description: translation.mixmodetitle, uri: "/plugins/blockciphers/mixmode"}
         ]);
     }
   
-  
     onMount(() => {
-        title.set('Hashing');
+        title.set('Block Ciphers');
     });
 </script>
 
 <body>
     <div class="bodycontainer">
         <div class="blockcontainer">
-
+            <div class="cleartext">
+                <BlockViewer {cleartext} />
+            </div>
+            <div class="encryption">
+                <EncryptionViewer {key} />
+            </div>
+            <div class="ciphertext">
+                <BlockViewer {ciphertext} />
+            </div>
         </div>
-        <div class="textfield">
-            {translation.introtext}
-            {randomInput}
-        </div>
-        <div class="textfield">
-            {translation.blocktext}
+        <div class="buttoncontainer">
+            <button on:click={toggleShowConfusion}>{translation.showConf}</button>
+            <button on:click={toggleShowDiffusion}>{translation.showDiff}</button>
         </div>
         <div class="blockcontainer">
-            <Blockviewer {data} />
-        </div>
-        <div class="textfield">
-            {translation.blocktext}
-        </div>
+            <div class="cleartext">
+                {#if showDiffusion}
+                    <ComparisonBlockViewer original={cleartext}, modified={diffusionCleartext} />
+                {:else if showConfusion}
+                    <BlockViewer {cleartext} />
+                {/if}
+            </div>
+            <div class="encryption">
+                {#if showDiffusion}
+                    <EncryptionViewer {key} />
+                {:else if showConfusion}
+                    <EncryptionViewer {confusionKey} />
+                {/if}
+            </div>
+            <div class="ciphertext">
+                {#if showDiffusion}
+                    <ComparisonBlockViewer original={ciphertext}, modified={diffusionCiphertext} />
+                {:else if showConfusion}
+                    <ComparisonBlockViewer original={ciphertext}, modified={confusionCiphertext} />
+                {/if}
+            </div>
     </div>
 </body>
 
 <style>
-      form {
-        display: flex;
-        flex-direction: column;
-        width: fit-content;
-        gap: 10px;
-        padding: 20px;
-        border: 2px solid #ccc;
-        border-radius: 10px;
-        background-color: #f8f8f8;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    input, select {
-        padding: 8px 10px;
-        border: 2px solid #ccc;
-        border-radius: 5px;
-        font-size: 16px;
-        color: #333;
-        background-color: white;
-        transition: border-color 0.3s ease-in-out;
-    }
-
-    input:focus, select:focus {
-        border-color: #007BFF;
-        outline: none;
-    }
-
     .bodycontainer {
         display: flex;
         flex-direction: column;

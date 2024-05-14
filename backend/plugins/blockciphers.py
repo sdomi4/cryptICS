@@ -7,6 +7,9 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
+from Crypto.Random import get_random_bytes
+from Crypto.Random.random import randrange
+
 from backend.util_internal.aes import aes_encrypt
 from backend.util_internal.conversions import str_to_binary, hex_to_binary
 from backend.util_internal.conversions import binary_to_blocks
@@ -22,6 +25,13 @@ class EncryptResponse(BaseModel):
 
 class CipherResponse(BaseModel):
     ciphers: list[str]
+
+class ConfusionDiffusionResponse(BaseModel):
+    cleartext: str
+    key: str
+    ciphertext: str
+    diffusion: dict
+    confusion: dict
 
 # All logic should be contained in the Plugin class, for plugin discovery/import
 class Plugin():
@@ -80,5 +90,49 @@ class Plugin():
             "data": {
                 "plaintext": plaintext,
                 "ciphertext": ciphertext
+            }
+        }
+    
+    @router.get("/blockciphers/confusion-diffusion", response_model=ConfusionDiffusionResponse)
+    def run():
+        random_input = get_random_bytes(16)
+        random_key = get_random_bytes(16)
+
+        # key with 1 random bit changed
+        confusion_key = bytearray(random_key)
+        confusion_key[randrange(0, 15)] ^= 1 << randrange(0, 7)
+
+        print("Random key:")
+        print(random_key)
+        print(hex_to_binary(random_key.hex()))
+        print("Confusion key:")
+        print(confusion_key)
+        print(hex_to_binary(confusion_key.hex()))
+
+        diffusion_input = bytearray(random_input)
+        diffusion_input[randrange(0, 15)] ^= 1 << randrange(0, 7)
+
+        print("Random input:")
+        print(random_input)
+        print(hex_to_binary(random_input.hex()))
+        print("Diffusion input:")
+        print(diffusion_input)
+        print(hex_to_binary(diffusion_input.hex()))
+
+        encrypt_response = aes_encrypt(random_input, "ECB", random_key)
+        confusion_response = aes_encrypt(random_input, "ECB", bytes(confusion_key))
+        diffusion_repsonse = aes_encrypt(bytes(diffusion_input), "ECB", random_key)
+
+        return {
+            "cleartext": hex_to_binary(random_input.hex()),
+            "key": hex_to_binary(random_key.hex()),
+            "ciphertext": hex_to_binary(encrypt_response["ciphertext"]),
+            "diffusion": {
+                "cleartext": hex_to_binary(diffusion_input.hex()),
+                "ciphertext": hex_to_binary(diffusion_repsonse["ciphertext"])
+            },
+            "confusion": {
+                "key": hex_to_binary(confusion_key.hex()),
+                "ciphertext": hex_to_binary(confusion_response["ciphertext"])
             }
         }
