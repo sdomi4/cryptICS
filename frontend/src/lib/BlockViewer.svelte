@@ -1,10 +1,10 @@
 <script>
-    // data contains plaintext, key, and ciphertext
-    export let cleartext = '';
+    export let binaryblocks = '';
+    console.log(binaryblocks);
 </script>
 
 <div class="blockviewer">
-    {#each cleartext as block}
+    {#each binaryblocks as block}
         <div class="blockcontainer">
             {block}
         </div>
@@ -14,13 +14,18 @@
 <style>
     .blockviewer {
         display: flex;
-        flex-direction: column;
-        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px; 
     }
 
     .blockcontainer {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
+        width: 16ch;
+        padding: 10px;
+        border: 1px solid #666;
+        border-radius: 4px;
+        background-color: #fff;
+        display: block;
+        word-wrap: break-word;
+        text-align: center;
     }
 </style>

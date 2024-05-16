@@ -27,9 +27,9 @@ class CipherResponse(BaseModel):
     ciphers: list[str]
 
 class ConfusionDiffusionResponse(BaseModel):
-    cleartext: str
+    cleartext: list[str]
     key: str
-    ciphertext: str
+    ciphertext: list[str]
     diffusion: dict
     confusion: dict
 
@@ -95,44 +95,30 @@ class Plugin():
     
     @router.get("/blockciphers/confusion-diffusion", response_model=ConfusionDiffusionResponse)
     def run():
-        random_input = get_random_bytes(16)
+        random_input = get_random_bytes(32)
         random_key = get_random_bytes(16)
 
         # key with 1 random bit changed
         confusion_key = bytearray(random_key)
         confusion_key[randrange(0, 15)] ^= 1 << randrange(0, 7)
 
-        print("Random key:")
-        print(random_key)
-        print(hex_to_binary(random_key.hex()))
-        print("Confusion key:")
-        print(confusion_key)
-        print(hex_to_binary(confusion_key.hex()))
-
         diffusion_input = bytearray(random_input)
         diffusion_input[randrange(0, 15)] ^= 1 << randrange(0, 7)
-
-        print("Random input:")
-        print(random_input)
-        print(hex_to_binary(random_input.hex()))
-        print("Diffusion input:")
-        print(diffusion_input)
-        print(hex_to_binary(diffusion_input.hex()))
 
         encrypt_response = aes_encrypt(random_input, "ECB", random_key)
         confusion_response = aes_encrypt(random_input, "ECB", bytes(confusion_key))
         diffusion_repsonse = aes_encrypt(bytes(diffusion_input), "ECB", random_key)
 
         return {
-            "cleartext": hex_to_binary(random_input.hex()),
-            "key": hex_to_binary(random_key.hex()),
-            "ciphertext": hex_to_binary(encrypt_response["ciphertext"]),
+            "cleartext": binary_to_blocks(hex_to_binary(random_input.hex()), 128),
+            "key": random_key.hex(),
+            "ciphertext": binary_to_blocks(hex_to_binary(encrypt_response["ciphertext"]), 128),
             "diffusion": {
-                "cleartext": hex_to_binary(diffusion_input.hex()),
-                "ciphertext": hex_to_binary(diffusion_repsonse["ciphertext"])
+                "cleartext": binary_to_blocks(hex_to_binary(diffusion_input.hex()), 128),
+                "ciphertext": binary_to_blocks(hex_to_binary(diffusion_repsonse["ciphertext"]), 128)
             },
             "confusion": {
-                "key": hex_to_binary(confusion_key.hex()),
-                "ciphertext": hex_to_binary(confusion_response["ciphertext"])
+                "key": confusion_key.hex(),
+                "ciphertext": binary_to_blocks(hex_to_binary(confusion_response["ciphertext"]), 128)
             }
         }

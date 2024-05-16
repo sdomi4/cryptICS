@@ -63,21 +63,21 @@
     }
 
     .binarydata {
-        display: flex; /* Flex container to hold blocks inline */
-        flex-wrap: wrap; /* Allows blocks to wrap onto the next line */
-        gap: 10px; /* Spacing between blocks */
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px; 
     }
 
     .binaryblock {
-        width: 8ch; /* Fixed width for each block */
-        padding: 10px; /* Padding inside each block */
-        border: 1px solid #666; /* Solid border for blocks */
+        width: 8ch;
+        padding: 10px;
+        border: 1px solid #666;
         border-radius: 4px;
-        background-color: #fff; /* White background for contrast */
-        display: block; /* Grid layout to split the block into lines */
-        grid-template-columns: 1fr; /* One column grid */
-        word-wrap: break-word; /* Ensures content breaks to avoid overflow */
-        text-align: center; /* Centers text in the block */
+        background-color: #fff;
+        display: block;
+        grid-template-columns: 1fr;
+        word-wrap: break-word;
+        text-align: center;
     }
     .binaryblock > div {
         line-height: 1.5;

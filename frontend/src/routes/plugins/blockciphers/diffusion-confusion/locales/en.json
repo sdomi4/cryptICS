@@ -2,6 +2,12 @@
     "diffconftitle": "Diffusion & Confusion",
     "ciphermodetitle": "Cipher Modes",
     "mixmodetitle": "Mix Mode",
-    "showConf": "Show Confusion",
-    "showDiff": "Show Diffusion"
+    "showConf": "Confusion",
+    "showDiff": "Diffusion",
+    "diffconfintro": "32 bytes of random data (equivalent to 2 blocks in AES) and a random flipped bit (in the cleartext or the key) are used to demonstrate the effects of diffusion and confusion. The used cipher is AES128-ECB, so diffusion changes are contained within the affected block.",
+    "keyintro": "The key K is randomly generated:",
+    "confusionkey": "For the demonstration of confusion, a random bit is flipped in the key K'",
+    "diffusioncleartext": "For the demonstration of diffusion, a random bit is flipped in the cleartext",
+    "diffusion": "A bit is flipped in the cleartext, which causes about 50% of the bits to flip in the affected blocks ciphertext.",
+    "confusion": "In the key K', a bit is flipped:"
 }
