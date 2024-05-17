@@ -41,7 +41,7 @@
 
     .blockviewer {
         display: flex;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
         gap: 10px; 
     }
 

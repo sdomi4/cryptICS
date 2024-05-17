@@ -1,6 +1,6 @@
 {
     "diffconftitle": "Diffusion & Confusion",
-    "ciphermodetitle": "Cipher Modes",
+    "ciphermodetitle": "Error propagation",
     "mixmodetitle": "Mix Mode",
     "showConf": "Confusion",
     "showDiff": "Diffusion",

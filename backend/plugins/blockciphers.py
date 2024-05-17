@@ -10,13 +10,22 @@ from pydantic import BaseModel
 from Crypto.Random import get_random_bytes
 from Crypto.Random.random import randrange
 
-from backend.util_internal.aes import aes_encrypt
+from backend.util_internal.aes import aes_encrypt, aes_decrypt
 from backend.util_internal.conversions import str_to_binary, hex_to_binary
-from backend.util_internal.conversions import binary_to_blocks
+from backend.util_internal.conversions import binary_to_blocks, hex_to_blocks
 
 class EncryptRequest(BaseModel):
     mode: str
     data: str
+
+class FaultRequest(BaseModel):
+    mode: str
+
+class FaultResponse(BaseModel):
+    cleartext: list[str]
+    key: str
+    ciphertext: list[str]
+    fault: dict 
 
 class EncryptResponse(BaseModel):
     mode: str
@@ -120,5 +129,30 @@ class Plugin():
             "confusion": {
                 "key": confusion_key.hex(),
                 "ciphertext": binary_to_blocks(hex_to_binary(confusion_response["ciphertext"]), 128)
+            }
+        }
+    
+    @router.post("/blockciphers/faults", response_model=FaultResponse)
+    def run(fault_request: FaultRequest):
+        # encrypt random data, 4 blocks to show error propagation properly
+        random_input = get_random_bytes(64)
+        random_key = get_random_bytes(16)
+
+        encrypt_response = aes_encrypt(random_input, fault_request.mode, random_key)
+        # flip a random bit in the 2nd ciphertext block
+        ciphertext = encrypt_response["ciphertext"]
+        faulty_ciphertext = bytearray.fromhex(ciphertext)
+        faulty_ciphertext[randrange(16, 31)] ^= 1 << randrange(0, 7)
+
+        # decrypt the faulty ciphertext
+        decrypt_response = aes_decrypt(bytes(faulty_ciphertext), fault_request.mode, random_key)
+
+        return {
+            "cleartext": hex_to_blocks(random_input.hex(), 128),
+            "key": random_key.hex(),
+            "ciphertext": hex_to_blocks(ciphertext, 128),
+            "fault": {
+                "modified_ciphertext": hex_to_blocks(faulty_ciphertext.hex(), 128),
+                "modified_decrypted": hex_to_blocks(decrypt_response, 128)
             }
         }

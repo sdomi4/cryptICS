@@ -1,12 +1,12 @@
 /** @type {import('./$types').PageServerLoad} */
-
+import { API_BASE_URL } from '$lib/config';
 export const actions = {
   default: async ({ request }) => {
     console.log(request);
     const data = await request.formData()
     console.log("===================")
     console.log(data);
-    const apiResponse = await fetch('http://localhost:8000/plugins/groups/subgroups', {
+    const apiResponse = await fetch(`${API_BASE_URL}/plugins/groups/subgroups`, {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',

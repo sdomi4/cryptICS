@@ -1,5 +1,11 @@
 import binascii
 
+def hex_to_blocks(hex_data: str, block_size: int) -> list[str]:
+    # typecast to int, expect user to be smart enough to provide reasonable block size
+    n = int(block_size / 4)
+    return [hex_data[i:i+n] for i in range(0, len(hex_data), n)]
+    
+
 def binary_to_blocks(binary_data: str, block_size: int) -> list[str]:
     return [binary_data[i:i+block_size] for i in range(0, len(binary_data), block_size)]
 

@@ -12,7 +12,6 @@
   $: {
         translation = $language === 'en' ? en : de;
         navLinks.set([
-            { description: translation.learn, uri: "/plugins/subgroups/learn" },
             { description: translation.practice, uri: "/plugins/subgroups/practice"},
             { description: translation.calculate, uri: "/plugins/subgroups/calculate"}
         ]);
@@ -33,12 +32,6 @@
       {translation.introtext}
   </div>
   <div class="sections">
-  <div class="sectioncontainer">
-    {translation.learntext}
-    <div class="sectionlink">
-      <a href='/plugins/subgroups/learn'>Learn</a>  
-    </div>
-  </div>
   <div class="sectioncontainer">
     {translation.practicetext}
     <div class="sectionlink">

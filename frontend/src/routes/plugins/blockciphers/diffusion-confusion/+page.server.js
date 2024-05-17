@@ -1,6 +1,7 @@
 // onMount function to load random cipher data to show confusion and diffusion
+import { API_BASE_URL } from '$lib/config';
 export async function load({ }) {
-    const apiResponse = await fetch(`http://localhost:8000/plugins/blockciphers/confusion-diffusion`);
+    const apiResponse = await fetch(`${API_BASE_URL}/plugins/blockciphers/confusion-diffusion`);
     const response = await apiResponse.json();
     console.log(response)
     return {

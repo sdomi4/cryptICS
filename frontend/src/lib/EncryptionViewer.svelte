@@ -10,7 +10,6 @@
         {#each {length: blocknumber} as _, i}
         <div class="ciphersymbol">
             <svg width="130" height="150" xmlns="http://www.w3.org/2000/svg">
-              
               <path d="M 65,75 L 45,50 L 85,50 L 45,100 L 85,100 Z" fill="transparent" stroke="black" stroke-width="2"/>
               <text x="5" y="51.5%" dominant-baseline="middle" text-anchor="left" fill="black" font-size="20">{key}</text>
               <text x="85" y="51.5%" dominant-baseline="middle" text-anchor="left" fill="black" font-size="20">E</text>

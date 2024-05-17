@@ -9,24 +9,47 @@
     import en from './locales/en.json';
   
     import { language } from '$lib/language';
+    import { API_BASE_URL } from '$lib/config';
 
     export let data;
-    console.log(data);
+    let faultData;
+    let loading = true;
 
     let translation;
     $: {
         translation = $language === 'en' ? en : de;
         navLinks.set([
             { description: translation.diffconftitle, uri: "/plugins/blockciphers/diffusion-confusion" },
-            { description: translation.ciphermodetitle, uri: "/plugins/blockciphers/faults"}
+            { description: translation.ciphermodetitle, uri: "/plugins/blockciphers/ciphermodes"}
         ]);
     }
+
+    async function fetchData() {
+    const response = await fetch(`/backend/cbc`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    });
+
+    faultData = await response.json();
+    console.log(faultData);
+    loading = false;
+  }
   
     onMount(() => {
         title.set('Block Ciphers');
+        fetchData();
     });
 </script>
 
 <body>
-
+    {#if loading}
+        <p>Loading...</p>
+    {:else}
+        <div>
+            <!-- Display your data here -->
+            <pre>{faultData}</pre>
+        </div>
+    {/if}
 </body>

@@ -1,7 +1,6 @@
 {
     "diffconftitle": "Diffusion & Konfusion",
-    "ciphermodetitle": "Modi",
-    "mixmodetitle": "Mix-Modus",
+    "ciphermodetitle": "Fehlerfortpflanzung",
     "showConf": "Konfusion",
     "showDiff": "Diffusion",
     "diffconfintro": "Anhand von 32 Byte zufälligen Daten (sprich 2 Blöcke in AES) und einem zufällig geänderten Bit (im Klartext respektive Schlüssel) werden die Effekte von Diffusion und Konfusion demonstriert. Zur Verschlüsselung wird AES128-ECB verwendet, die Diffusion ist entsprechend auf einen einzelnen Block beschränkt.",

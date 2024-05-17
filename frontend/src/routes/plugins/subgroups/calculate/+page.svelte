@@ -1,4 +1,14 @@
 <script>
+    import { language } from '$lib/language';
+    let translation;
+    $: {
+        translation = $language === 'en' ? en : de;
+        navLinks.set([
+            { description: translation.practice, uri: "/plugins/subgroups/practice"},
+            { description: translation.calculate, uri: "/plugins/subgroups/calculate"}
+        ]);
+    }
+
     export let form;
     let subgroups = form?.body.subgroups || []
     subgroups.sort(Object.keys);

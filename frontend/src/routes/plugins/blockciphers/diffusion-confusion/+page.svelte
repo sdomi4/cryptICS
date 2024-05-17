@@ -55,8 +55,7 @@
         translation = $language === 'en' ? en : de;
         navLinks.set([
             { description: translation.diffconftitle, uri: "/plugins/blockciphers/diffusion-confusion" },
-            { description: translation.ciphermodetitle, uri: "/plugins/blockciphers/ciphermodes"},
-            { description: translation.mixmodetitle, uri: "/plugins/blockciphers/mixmode"}
+            { description: translation.ciphermodetitle, uri: "/plugins/blockciphers/faults"}
         ]);
     }
   

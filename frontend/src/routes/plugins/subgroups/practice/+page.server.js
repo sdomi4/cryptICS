@@ -1,5 +1,5 @@
 /** @type {import('./$types').PageServerLoad} */
-
+import { API_BASE_URL } from '$lib/config';
 export async function load({ fetch }) {
   // static data for now, dynamically generate random groups later
   const groupData = {
@@ -8,7 +8,7 @@ export async function load({ fetch }) {
     mod: 7
   };
 
-  const apiResponse = await fetch("http://localhost:8000/plugins/groups/subgroups", {
+  const apiResponse = await fetch(`${API_BASE_URL}/plugins/groups/subgroups`, {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',

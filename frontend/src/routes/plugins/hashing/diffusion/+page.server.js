@@ -1,7 +1,8 @@
+import { API_BASE_URL } from '$lib/config';
 export const actions = {
     default: async ({ request }) => {
       const data = await request.formData()
-      const hashResponse = await fetch('http://localhost:8000/plugins/hash/diffusion', {
+      const hashResponse = await fetch(`${API_BASE_URL}/plugins/hash/diffusion`, {
         method: 'post',
         headers: {
           'Content-Type': 'application/json',
@@ -25,7 +26,7 @@ export const actions = {
 
 // onMount function to load available hash algorithms
 export async function load({ }) {
-    const apiResponse = await fetch(`http://localhost:8000/plugins/hash`);
+    const apiResponse = await fetch(`${API_BASE_URL}/plugins/hash`);
     const algorithms = await apiResponse.json();
     return {
         status: 200,
