@@ -11,6 +11,9 @@
             let highlightedString = '';
 
             for (let j = 0; j < originalString.length; j++) {
+                if (j > 0 && j % 16 === 0) {
+                    highlightedString += '<br>';
+                }
                 if (originalString[j] === modifiedString[j]) {
                     highlightedString += modifiedString[j];
                 } else {
@@ -22,8 +25,7 @@
         return highlightedArray;
     }
 
-    let highlightedDifferences = highlighter(original, modified);
-    console.log(highlightedDifferences);
+    $: highlightedDifferences = highlighter(original, modified);
 </script>
 
 <div class="blockviewer">
@@ -46,14 +48,14 @@
     }
 
     .blockcontainer {
-        width: 16ch;
+        width: fit-content;
         padding: 10px;
         border: 1px solid #666;
         border-radius: 4px;
         background-color: #ffffff;
         display: block;
-        grid-template-columns: 1fr;
         word-wrap: break-word;
         text-align: center;
+        font-family: 'Courier New', Courier, monospace;
     }
 </style>

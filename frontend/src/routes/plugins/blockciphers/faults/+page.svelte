@@ -9,47 +9,125 @@
     import en from './locales/en.json';
   
     import { language } from '$lib/language';
-    import { API_BASE_URL } from '$lib/config';
+    import ClickableBlockViewer from '$lib/ClickableBlockViewer.svelte';
+    import ComparisonBlockViewer from '$lib/ComparisonBlockViewer.svelte';
 
     export let data;
-    let faultData;
-    let loading = true;
+
+    // use CBC as standin for all modes
+    let ciphertext = data.body.ciphertext.CBC;
+    let originalCleartext = data.body.cleartext;
+    let key = data.body.key;
+    let iv = data.body.iv;
+    let nonce = data.body.nonce;
+
+    let loading = false;
+    let showFaults = false;
+    let faultindexes = {
+        0: [],
+        1: [],
+        2: [],
+        3: []
+    };
+    let cleartexts = {};
+    let clear = {
+        ECB: originalCleartext,
+        CBC: originalCleartext,
+        OFB: originalCleartext,
+        CFB: originalCleartext,
+        CTR: originalCleartext
+    };
+    $: {
+        clear = cleartexts?.cleartext || clear;
+    }
 
     let translation;
     $: {
         translation = $language === 'en' ? en : de;
         navLinks.set([
             { description: translation.diffconftitle, uri: "/plugins/blockciphers/diffusion-confusion" },
-            { description: translation.ciphermodetitle, uri: "/plugins/blockciphers/ciphermodes"}
+            { description: translation.ciphermodetitle, uri: "/plugins/blockciphers/faults"}
         ]);
     }
 
-    async function fetchData() {
-    const response = await fetch(`/backend/cbc`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-    });
+    async function handleLetterClick(letter, index, block) {
+        loading = true;
+        // check if letter is being checked or unchecked
+        if (index in faultindexes[block]) {
+            faultindexes[block] = faultindexes[block].filter(e => e !== index);
+        } else {
+            faultindexes[block].push(index);
+        }
+        const payload = JSON.stringify({
+            key: key,
+            ciphertext: {
+                ECB: data.body.ciphertext.ECB,
+                CBC: data.body.ciphertext.CBC,
+                OFB: data.body.ciphertext.OFB,
+                CFB: data.body.ciphertext.CFB,
+                CTR: data.body.ciphertext.CTR
+            },
+            fault_indexes: faultindexes,
+            iv: iv,
+            nonce: nonce
+        });
+        // call backend to decrypt with introduced faults
+        const response = await fetch('/backend/faults', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: payload
+        })
 
-    faultData = await response.json();
-    console.log(faultData);
-    loading = false;
-  }
+        cleartexts = await response.json();
+        //console.log(cleartexts.cleartext);
+        loading = false;
+        showFaults = true;
+    }
   
     onMount(() => {
         title.set('Block Ciphers');
-        fetchData();
     });
 </script>
 
 <body>
-    {#if loading}
-        <p>Loading...</p>
-    {:else}
-        <div>
-            <!-- Display your data here -->
-            <pre>{faultData}</pre>
+    <div class="bodycontainer">
+        
+        <div class="introcontainer">
+
         </div>
-    {/if}
+        <div class="visualisationcontainer">
+        <div class="ciphertextcontainer">
+            <ClickableBlockViewer binaryblocks={ciphertext} onLetterClick={handleLetterClick}/>
+        </div>
+        <div>
+            <div class="decryptionspace">
+
+            </div>
+            <div class="faultcontainer">
+                <div id="ECB" class="cleartextcontainer">
+                    <h1>ECB</h1>
+                    <ComparisonBlockViewer original={originalCleartext} modified={clear.ECB}/>
+                </div>
+                <div id="CBC" class="cleartextcontainer">
+                    <h1>CBC</h1>
+                    <ComparisonBlockViewer original={originalCleartext} modified={clear.CBC}/>
+                </div>
+                <div id="OFB" class="cleartextcontainer">
+                    <h1>OFB</h1>
+                    <ComparisonBlockViewer original={originalCleartext} modified={clear.OFB}/>
+                </div>
+                <div id="CFB" class="cleartextcontainer">
+                    <h1>CFB</h1>
+                    <ComparisonBlockViewer original={originalCleartext} modified={clear.CFB}/>
+                </div>
+                <div id="CTR" class="cleartextcontainer">
+                    <h1>CTR</h1>
+                    <ComparisonBlockViewer original={originalCleartext} modified={clear.CTR}/>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>

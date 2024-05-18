@@ -4,8 +4,7 @@ from Crypto.Util.Padding import pad, unpad
 
 # does not perform any padding, use aes_encrypt_unaligned for that
 # this is mostly for neat demonstrations with known length data
-def aes_encrypt(data: str, mode: str, key: str = None):
-    padding_needed = False
+def aes_encrypt(data: str, mode: str, key: str = None, iv: str = None, nonce: str = None):
     match mode:
         case "ECB":
             cipher_mode = AES.MODE_ECB
@@ -24,7 +23,12 @@ def aes_encrypt(data: str, mode: str, key: str = None):
     
     if key is None:
         key = get_random_bytes(16)
-    cipher = AES.new(key, cipher_mode)
+    if iv is not None:
+        cipher = AES.new(key, cipher_mode, iv=iv)
+    elif nonce is not None:
+        cipher = AES.new(key, cipher_mode, nonce=nonce)
+    else:
+        cipher = AES.new(key, cipher_mode)
 
     ciphertext = cipher.encrypt(data)
 
@@ -33,7 +37,7 @@ def aes_encrypt(data: str, mode: str, key: str = None):
         "ciphertext": ciphertext.hex()
     }
 
-def aes_encrypt_unaligned(data: str, mode: str, key: str = None, padding: str = "PKCS7"):
+def aes_encrypt_unaligned(data: str, mode: str, key: str = None, padding: str = "PKCS7", iv: str = None, nonce: str = None):
     padding_needed = False
     match mode:
         case "ECB":
@@ -57,7 +61,8 @@ def aes_encrypt_unaligned(data: str, mode: str, key: str = None, padding: str = 
     
     if key is None:
         key = get_random_bytes(16)
-    cipher = AES.new(key, cipher_mode)
+    # we assume IV / nonce are passed properly
+    cipher = AES.new(key, cipher_mode, iv=iv, nonce=nonce)
 
     ciphertext = cipher.encrypt(data)
 
@@ -66,8 +71,8 @@ def aes_encrypt_unaligned(data: str, mode: str, key: str = None, padding: str = 
         "ciphertext": ciphertext.hex()
     }
 
-# does not perform any unpadding, use aes_decrypt_unaligned for that
-def aes_decrypt(data: str, mode: str, key: str):
+# does not perform any unpadding, use aes_decrypt_unaligned instead
+def aes_decrypt(data: str, mode: str, key: str, iv: str = None, nonce: str = None):
     padded = False
     match mode:
         case "ECB":
@@ -88,7 +93,16 @@ def aes_decrypt(data: str, mode: str, key: str):
     if not isinstance(key, bytes):
         key = bytes.fromhex(key)
     
-    cipher = AES.new(key, cipher_mode)
+    if iv is not None:
+        if not isinstance(iv, bytes):
+            iv = bytes.fromhex(iv)
+        cipher = AES.new(key, cipher_mode, iv=iv)
+    elif nonce is not None:
+        if not isinstance(nonce, bytes):
+            nonce = bytes.fromhex(nonce)
+        cipher = AES.new(key, cipher_mode, nonce=nonce)
+    else:
+        cipher = AES.new(key, cipher_mode)
     data = cipher.decrypt(data)
     return data.hex()
 

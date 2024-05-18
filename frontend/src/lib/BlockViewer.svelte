@@ -27,5 +27,6 @@
         display: block;
         word-wrap: break-word;
         text-align: center;
+        font-family: 'Courier New', Courier, monospace;
     }
 </style>
