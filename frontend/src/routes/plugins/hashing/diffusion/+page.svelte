@@ -86,7 +86,7 @@
 </body>
 
 <style>
-      form {
+    form {
         display: flex;
         flex-direction: column;
         width: fit-content;

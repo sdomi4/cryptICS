@@ -1,4 +1,10 @@
 {
+    "pagetitle": "Blockchiffren",
     "diffconftitle": "Diffusion & Konfusion",
-    "ciphermodetitle": "Fehlerfortpflanzung"
+    "ciphermodetitle": "Fehlerfortpflanzung",
+    "faulttitle": "Fehlerfortpflanzung",
+    "ciphertext": "Chiffrat(*):",
+    "decrypted": "Entschlüsselt:",
+    "faultdescription": "Gezeigt wird ein zufällig generiertes Chiffrat(*), jeder Block entspricht 128 Bit. Per Klick können im Chiffrat Fehler eingefügt werden. Darunter wird gezeigt, wie sich der Fehler in den unterschiedlichen Blockchiffrenmodi auswirkt.",
+    "faultdetails": "(*) Im Hintergrund werden pro Modus unterschiedliche Chiffrate generiert unt entschlüsselt, das Angezeigte Chiffrat (AES128-CBC) dient der Veranschaulichung. Das Klicken auf eine Hex-Zahl dreht immer das letzte der 4 repräsentierten Bits des jeweiligen Chiffrats."
 }

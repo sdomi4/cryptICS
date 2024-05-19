@@ -1,6 +1,7 @@
 {
     "title": "Abstract Algebra / Group Theory",
-	"learn": "Theory",
+	"pagetitle": "Group Theory",
+	"overviewtitle": "Overview",
 	"practice": "Practice",
 	"calculate": "Calculate",
 	"introtext": "Abstract algebra, speficically group theory, is a fundamental component of cryptography. Group theory is applied in a range of cryptographic applications based on the discrete logarithm problem like Diffie-Hellmann, Elgamal, and Elliptic Curve Cryptography.",

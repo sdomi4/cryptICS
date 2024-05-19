@@ -1,7 +1,6 @@
 {
-    "learn": "Theory",
+    "pagetitle": "Group Theory",
     "practice": "Practice",
-    "calculate": "Calculate",
     "next": "Next Step",
     "given": "Given is the group",
     "order": "Therefore, the group has order",

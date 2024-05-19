@@ -4,6 +4,10 @@
         padding-top: 100px;
     }
 
+    .bodycontainer {
+        margin-top: 60px;
+    }
+
     .correct {
         background-color: #c8e6c9;
     }
@@ -79,8 +83,10 @@
 </style>
 <script>
     import { writable, derived } from 'svelte/store';
-    import { navLinks } from '$lib/stores';
-    import '../../../../style/globalStyle.css'
+    import { title } from '$lib/title';
+    import { backLink } from '$lib/title';
+    import { pageTitle } from '$lib/stores.js';
+    import '../../../../style/globalStyle.css';
     // import data from page load server side
     export let data;
     export let error = null;
@@ -97,10 +103,10 @@
     let translation;
     $: {
         translation = $language === 'en' ? en : de;
-        navLinks.set([
-            { description: translation.practice, uri: "/plugins/subgroups/practice"},
-            { description: translation.calculate, uri: "/plugins/subgroups/calculate"}
-        ]);
+        
+        title.set(translation.pagetitle);
+        backLink.set('/plugins/subgroups');
+        pageTitle.set(translation.practice);
     }
 
     let elements = data.props.data.elements;

@@ -12,13 +12,7 @@ class DiffRequest(BaseModel):
 class Plugin():
     name = "plugins.diff"
     dependencies = None
-    endpoints = [
-        {
-            "uri": "/diff",
-            "tag": "homepage",
-            "description": "Diff as a test"
-        }
-    ]
+    endpoints = []
 
     router = APIRouter(
         prefix="/plugins"

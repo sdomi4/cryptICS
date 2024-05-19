@@ -2,6 +2,7 @@
     "diffconftitle": "Diffusion & Konfusion",
     "ciphermodetitle": "Fehlerfortpflanzung",
     "title": "Blockchiffren",
+    "overviewtitle": "Übersicht",
     "introtext": "Blockchiffren und ihre Modi sind ein Grundbaustein der Kryptographie. Die unterschiedlichen Modi haben alle ihre Stärken und Schwächen.",
     "diffconf": "Die Prinzipien der Diffusion und Konfusion, demonstriert anhand von Blockchiffren.",
     "modes": "Die verschidenen Modi von Blockchiffren sowie deren Eigenheiten."

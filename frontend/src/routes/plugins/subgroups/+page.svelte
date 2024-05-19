@@ -2,19 +2,20 @@
   import '../../../style/globalStyle.css'
   
   import { title } from '$lib/title';
+  import { backLink } from '$lib/title'
+  import { pageTitle } from '$lib/stores.js';
   import { onMount } from 'svelte';
 
   import de from './locales/de.json';
   import en from './locales/en.json';
-  import { navLinks } from '$lib/stores'
+
   import { language } from '$lib/language';
   let translation;
   $: {
         translation = $language === 'en' ? en : de;
-        navLinks.set([
-            { description: translation.practice, uri: "/plugins/subgroups/practice"},
-            { description: translation.calculate, uri: "/plugins/subgroups/calculate"}
-        ]);
+        title.set(translation.pagetitle);
+        backLink.set('/plugins/subgroups');
+        pageTitle.set(translation.overviewtitle);
     }
 
 
@@ -50,7 +51,7 @@
 <style>
     body {
     flex-grow: 1;
-    padding-top: 200px;
+    padding-top: 40px;
     display: flex;
     align-items: center;
     flex-direction: column;

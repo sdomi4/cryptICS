@@ -2,8 +2,6 @@ body {
     font-family: 'Roboto', sans-serif;
     background-color: #f4f4f4;
     color: #333;
-    margin: 0;
-    padding: 0;
     flex-grow: 1;
     max-width: 100%;
     overflow-x: hidden;
@@ -11,7 +9,7 @@ body {
 
 .bodycontainer {
     padding-left: 25px;
-    padding-top: 100px;
+    margin-top: 20px;
 }
 
 h1 {

@@ -2,7 +2,8 @@
     import '../../../style/globalStyle.css'
         
     import { title } from '$lib/title';
-    import { navLinks } from '$lib/stores.js'
+    import { backLink } from '$lib/title'
+    import { pageTitle } from '$lib/stores.js';
     import { onMount } from 'svelte';
 
     import de from './locales/de.json';
@@ -16,14 +17,13 @@
     let translation;
     $: {
         translation = $language === 'en' ? en : de;
-        navLinks.set([
-            { description: translation.diffconftitle, uri: "/plugins/blockciphers/diffusion-confusion" },
-            { description: translation.ciphermodetitle, uri: "/plugins/blockciphers/faults"}
-        ]);
+        title.set(translation.title);
+        backLink.set('/plugins/blockciphers');
+        pageTitle.set(translation.overviewtitle);
     }
 
     onMount(() => {
-        title.set('Block Ciphers');
+
     });
 </script>
 
@@ -44,7 +44,7 @@
     <div class="sectioncontainer">
       {translation.modes}
       <div class="sectionlink">
-        <a href='/plugins/blockciphers/modes'>{translation.ciphermodetitle}</a>  
+        <a href='/plugins/blockciphers/faults'>{translation.ciphermodetitle}</a>  
       </div>
     </div>
   </div>

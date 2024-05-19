@@ -5,9 +5,10 @@
     import ukFlag from '../../images/uk_flag.svg';
 
     import { title } from '$lib/title'
-    import { language } from '$lib/language'
+    import { backLink } from '$lib/title'
+    import { pageTitle } from '$lib/stores.js';
 
-    import { navLinks } from '$lib/stores.js';
+    import { language } from '$lib/language'
 
     function toggleLanguage() {
         language.update(lang => lang === 'en' ? 'de' : 'en');
@@ -31,12 +32,12 @@
             <div class="navseparator"></div>
             
             <div class = "navdiv">
-                <div class="pagename">{$title}:</div>
-                {#each $navLinks as link}
-                    <div class = "navlinkcontainer">
-                        <a class="navlink" href={link.uri}>{link.description}</a>
-                    </div>
-                {/each}
+                <div class="pagename">
+                    <a href={$backLink}>{$title}</a>:
+                </div>
+                <div class = "navlinkcontainer">
+                    <span class="navlink">{$pageTitle}</span>
+                </div>
             </div> 
         </nav>
         <div class="navrighthalf">
@@ -143,6 +144,7 @@
     .home {
         padding-top: 8px;
         font-size: 26px;
+        margin-left: 25px;
     }
 
     a {

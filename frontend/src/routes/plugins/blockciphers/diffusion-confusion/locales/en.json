@@ -1,4 +1,5 @@
 {
+    "pagetitle": "Block Ciphers",
     "diffconftitle": "Diffusion & Confusion",
     "ciphermodetitle": "Error propagation",
     "mixmodetitle": "Mix Mode",

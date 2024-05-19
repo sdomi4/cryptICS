@@ -62,9 +62,11 @@
 
     .letter {
         cursor: pointer;
+        transition: background-color 0.5s ease;
     }
 
     :global(.highlight) {
         background: #ffea4d;
+        transition: background-color 0.5s ease;
     }
 </style>

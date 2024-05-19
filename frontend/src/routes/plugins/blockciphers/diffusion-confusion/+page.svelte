@@ -2,7 +2,8 @@
     import '../../../../style/globalStyle.css'
     
     import { title } from '$lib/title';
-    import { navLinks } from '$lib/stores.js'
+    import { backLink } from '$lib/title'
+    import { pageTitle } from '$lib/stores.js';
     import { onMount } from 'svelte';
   
     import de from './locales/de.json';
@@ -17,21 +18,16 @@
     import EncryptionViewer from '../../../../lib/EncryptionViewer.svelte';
 
     export let data;
-    console.log(data);
 
     let cleartext = data.body.cleartext;
     let key = data.body.key;
     let ciphertext = data.body.ciphertext;
-    console.log(cleartext);
-    console.log(ciphertext);
 
     let diffusionCleartext = data.body.diffusion.cleartext;
     let confusionKey = data.body.confusion.key;
 
     let diffusionCiphertext = data.body.diffusion.ciphertext;
     let confusionCiphertext = data.body.confusion.ciphertext;
-
-
 
     let showDiffusion = false;
     let showConfusion = false;
@@ -53,14 +49,12 @@
     let translation;
     $: {
         translation = $language === 'en' ? en : de;
-        navLinks.set([
-            { description: translation.diffconftitle, uri: "/plugins/blockciphers/diffusion-confusion" },
-            { description: translation.ciphermodetitle, uri: "/plugins/blockciphers/faults"}
-        ]);
+        title.set(translation.pagetitle);
+        backLink.set('/plugins/blockciphers');
+        pageTitle.set(translation.diffconftitle);
     }
   
     onMount(() => {
-        title.set('Block Ciphers');
     });
 </script>
 

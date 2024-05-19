@@ -1,4 +1,6 @@
 <script>
+    import { fade } from 'svelte/transition';
+
     export let original = [];
     export let modified = [];
 
@@ -8,19 +10,19 @@
         for (let i = 0; i < original.length; i++) {
             let originalString = original[i];
             let modifiedString = modified[i];
-            let highlightedString = '';
+            let highlightedLetters = [];
 
             for (let j = 0; j < originalString.length; j++) {
                 if (j > 0 && j % 16 === 0) {
-                    highlightedString += '<br>';
+                    highlightedLetters.push({ letter: '<br>', isHighlighted: false, isBreak: true });
                 }
-                if (originalString[j] === modifiedString[j]) {
-                    highlightedString += modifiedString[j];
-                } else {
-                    highlightedString += `<span class="highlight">${modifiedString[j]}</span>`;
-                }
+                highlightedLetters.push({
+                    letter: modifiedString[j],
+                    isHighlighted: originalString[j] !== modifiedString[j],
+                    isBreak: false
+                });
             }
-            highlightedArray.push(highlightedString);
+            highlightedArray.push(highlightedLetters);
         }
         return highlightedArray;
     }
@@ -29,9 +31,17 @@
 </script>
 
 <div class="blockviewer">
-    {#each modified as block, i}
+    {#each highlightedDifferences as block, i}
         <div class="blockcontainer">
-            {@html highlightedDifferences[i]}
+            {#each block as { letter, isHighlighted, isBreak }, j}
+                {#if isBreak}
+                    <br>
+                {:else}
+                    <span class:highlight={isHighlighted} transition:fade>
+                        {letter}
+                    </span>
+                {/if}
+            {/each}
         </div>
     {/each}
 </div>
