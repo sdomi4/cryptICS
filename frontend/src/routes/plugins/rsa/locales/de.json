@@ -1,0 +1,7 @@
+{
+    "title": "RSA",
+    "overviewtitle": "Übersicht",
+    "introtext": "RSA ist ein weit verbreitetes asymmetrisches Verschlüsselungsverfahren, das auf der Schwierigkeit der Faktorisierung großer Zahlen basiert. RSA kann für Verschlüsselung und Signaturen verwendet werden, und hat homomorphe Eigenschaften.",
+    "homomorphic": "Eine Demonstration der multiplikativen homomorphen Eigenschaften von RSA",
+    "homomorphictitle": "Homomorphie"
+}

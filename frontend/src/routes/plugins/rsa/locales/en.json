@@ -1,0 +1,7 @@
+{
+    "title": "RSA",
+    "overviewtitle": "Overview",
+    "introtext": "RSA is a widely used asymmetric cryptosystem. It is based on the difficulty of factoring large integers. RSA can be used for encryption and signatures, and has partial homomorphic properties.",
+    "homomorphic": "A demonstration of RSA's mutliplicative homomorphic properties",
+    "homomorphictitle": "Homomorphic Properties"
+}
