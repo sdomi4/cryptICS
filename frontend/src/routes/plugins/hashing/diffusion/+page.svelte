@@ -136,22 +136,22 @@
     }
 
     button {
-    background-color: #007BFF; /* Vibrant blue background */
-    color: white; /* White text for high contrast */
-    border: none; /* No border for a cleaner look */
-    width: fit-content; /* Control the width to not span the entire parent container */
-    padding: 10px 20px; /* Appropriate padding for a comfortable click area */
-    font-size: 16px; /* Readable text size */
-    border-radius: 5px; /* Slightly rounded corners */
-    cursor: pointer; /* Cursor changes to pointer to indicate it's clickable */
-    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for visual effects */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow for 3D effect */
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    width: fit-content;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   }
 
   button:hover {
-    background-color: #0056b3; /* Darker shade of blue on hover/focus for feedback */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Slightly more pronounced shadow on hover/focus */
-    outline: none; /* Remove outline to maintain the sleek look */
+    background-color: #0056b3;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    outline: none;
   }
 
   .active {
