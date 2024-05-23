@@ -72,7 +72,10 @@ class Plugin():
         {
             "uri": "/plugins/blockciphers",
             "tag": "homepage",
-            "description": "Block Ciphers"
+            "description": {
+                "de": "Blockchiffren",
+                "en": "Block Ciphers"
+            }
         }
     ]
 

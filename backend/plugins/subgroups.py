@@ -30,7 +30,10 @@ class Plugin():
         {
             "uri": "/plugins/subgroups",
             "tag": "homepage",
-            "description": "Group Theory"
+            "description": {
+                "de": "Gruppentheorie",
+                "en": "Group Theory"
+            }
         },
         {
             "uri": "/plugins/subgroups/learn",

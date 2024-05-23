@@ -28,32 +28,40 @@
 </script>
 
 <body>
-    <h1 class="title">
-      {translation.title}
-    </h1>
-    <div class="sectioncontainer">
-        {translation.introtext}
-    </div>
-    <div class="sections">
-    <div class="sectioncontainer">
-      {translation.homomorphic}
-      <div class="sectionlink">
-        <a href='/plugins/rsa/homomorphic'>{translation.homomorphictitle}</a>  
+  <div class="bodycontainer">
+      <h1 class="title">
+        {translation.title}
+      </h1>
+      <div class="sectioncontainer">
+          {translation.introtext}
+      </div>
+      <div class="sections">
+      <div class="sectioncontainer">
+        {translation.homomorphic}
+        <div class="sectionlink">
+          <a href='/plugins/rsa/homomorphic'>{translation.homomorphictitle}</a>  
+        </div>
+      </div>
+      <div class="sectioncontainer">
+        {translation.blindsignature}
+        <div class="sectionlink">
+          <a href='/plugins/rsa/blindsignature'>{translation.blindtitle}</a>  
+        </div>
+      </div>
+      <div class="sectioncontainer">
+        {translation.carmichael}
+        <div class="sectionlink">
+          <a href='/plugins/rsa/blindsignature'>{translation.carmichael}</a>  
+        </div>
       </div>
     </div>
-    <div class="sectioncontainer">
-      ben begg egg gge e eeee teeeeem u
-      <div class="sectionlink">
-        <a href='/plugins/blockciphers/faults'>a</a>  
-      </div>
-    </div>
-  </div>
+</div>
   </body>
   
   <style>
-      body {
+    .bodycontainer {
       flex-grow: 1;
-      padding-top: 200px;
+      padding-top: 60px;
       display: flex;
       align-items: center;
       flex-direction: column;

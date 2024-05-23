@@ -42,7 +42,11 @@
     {#each plugins as plugin}
         <a href={plugin.uri}>
             <div class="plugin">
-                <h2>{plugin.description}</h2>
+                {#if $language === 'en'}
+                    <h2>{plugin.description.en}</h2>
+                {:else}
+                    <h2>{plugin.description.de}</h2>
+                {/if}
             </div>
         </a>
     {/each}

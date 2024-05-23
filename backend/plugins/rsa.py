@@ -6,7 +6,6 @@
 # To export API endpoints
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from base64 import b64encode, b64decode
 
 from backend.util_internal.rsa import rsa_encrypt_unpadded, rsa_decrypt_unpadded, get_key
 
@@ -15,6 +14,10 @@ class UnpaddedEncryptRequest(BaseModel):
 
 class UnpaddedDecryptRequest(BaseModel):
     data: int
+
+class HomomorphicRequest(BaseModel):
+    initial_data: int = None
+    modifier: int = None
 
 class UnpaddedDecryptResponse(BaseModel):
     decrypted_data: int
@@ -52,7 +55,10 @@ class Plugin():
         {
             "uri": "/plugins/rsa",
             "tag": "homepage",
-            "description": "RSA"
+            "description": {
+                "de": "RSA",
+                "en": "RSA"
+            }
         }
     ]
 
@@ -96,8 +102,8 @@ class Plugin():
             "decrypted_data": decrypted_data,
         }
     
-    @router.get("/rsa/homomorphic", response_model=HomomorphicResponse)
-    def run():
+    @router.post("/rsa/homomorphic", response_model=HomomorphicResponse)
+    def run(homomorphic_request: HomomorphicRequest):
         key = get_key()
         n = key['n']
         e = key['e']
@@ -105,10 +111,16 @@ class Plugin():
         p = key['p']
         q = key['q']
 
-        initial_data = 42
+        if homomorphic_request.initial_data is None:
+            initial_data = 42
+        else:
+            initial_data = homomorphic_request.initial_data
         encrypted_data = rsa_encrypt_unpadded(initial_data, e, n)
         
-        modifier = 2
+        if homomorphic_request.modifier is None:
+            modifier = 2
+        else:
+            modifier = homomorphic_request.modifier
         modified_data = rsa_encrypt_unpadded(modifier, e, n)
 
         homomorphic_data = (encrypted_data * modified_data) % n

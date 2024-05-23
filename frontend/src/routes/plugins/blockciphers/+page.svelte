@@ -53,7 +53,7 @@
   <style>
       body {
       flex-grow: 1;
-      padding-top: 200px;
+      padding-top: 60px;
       display: flex;
       align-items: center;
       flex-direction: column;

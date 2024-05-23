@@ -1,11 +1,11 @@
 <script>
     import '../../../../style/globalStyle.css'
     
+    import { onMount } from 'svelte';
     import { writable, derived } from 'svelte/store';
     import { title } from '$lib/title';
     import { backLink } from '$lib/title'
     import { pageTitle } from '$lib/stores.js';
-    import { onMount } from 'svelte';
     import { fade } from 'svelte/transition';
 
     import de from './locales/de.json';
@@ -13,8 +13,11 @@
   
     import { language } from '$lib/language';
 	import BlockViewer from '$lib/BlockViewer.svelte';
+    import BlockInput from '$lib/BlockInput.svelte';
 
     export let data;
+
+    
 
     // reactive declarations so the components hopefully update with changes
     $: initialData = data.body.initial_data;
@@ -24,7 +27,43 @@
     $: homomorphicData = data.body.homomorphic_data.slice(2, 126).concat("...");
     $: decryptedData = data.body.decrypted_data;
 
-    console.log(data.body);
+    function handleInputChange(event) {
+        if (event.detail === "") {
+            return;
+        }
+        initialData = event.detail;
+        updateEncryption();
+    }
+
+    function handleModifierChange(event) {
+        if (event.detail === "") {
+            return;
+        }
+        modifier = event.detail;
+        updateEncryption();
+    }
+
+    async function updateEncryption() {
+        const payload = JSON.stringify({
+            initial_data: initialData,
+            modifier: modifier
+        });
+        const response = await fetch('/backend/homomorphic', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: payload
+        })
+
+        const updated_data = await response.json();
+
+        encryptedData = updated_data.encrypted_data.slice(2, 126).concat("...");
+        modifiedData = updated_data.modified_data.slice(2, 126).concat("...");
+        homomorphicData = updated_data.homomorphic_data.slice(2, 126).concat("...");
+        decryptedData = updated_data.decrypted_data;
+    }
 
     let translation;
     $: {
@@ -82,7 +121,9 @@
     </div>
         <div class="gridcontainer {isOpen ? '' : 'hidden'}">
             <div class="griditem input">
-                <BlockViewer binaryblocks={[initialData]} />
+                <div class="inputblock">
+                    <BlockInput on:inputChange={handleInputChange} inputValue={initialData}/>
+                </div>
                 {#if $stepDetails.showEnc || !isOpen}
                 <svg width="100" height="120" transition:fade={{ delay: 250, duration: 300 }}>
                     <path d="M 50,0 L 50,118 L 42,108 L 58,108 L50,118 " fill="black" stroke-width="1" stroke="black" stroke-linejoin="round" />
@@ -102,8 +143,8 @@
             </div>
             <div class="griditem modifier">
                 {#if $stepDetails.showMod || !isOpen}
-                <div transition:fade={{ delay: 250, duration: 300 }}>
-                    <BlockViewer binaryblocks={[modifier]} />
+                <div transition:fade={{ delay: 250, duration: 300 }} class="inputblock">
+                    <BlockInput on:inputChange={handleModifierChange} inputValue={modifier}/>
                 </div>
                 {/if}
                 {#if $stepDetails.showModEnc || !isOpen}
