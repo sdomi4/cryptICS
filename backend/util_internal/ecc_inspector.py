@@ -1,4 +1,4 @@
-import math
+import math, random
 from typing import List, Tuple
 
 
@@ -8,8 +8,8 @@ class ECCInvestigator:
         self.b = b
         self.p = p
 
-        if self.p < 0:
-            raise Exception("p must be at least 0")
+        if self.p <= 1:
+            raise Exception("p must be at least 2")
 
     def is_curve_elliptic(self) -> bool:
         return (4 * pow(self.a, 3) + 27 * pow(self.b, 2)) % self.p != 0
@@ -49,6 +49,8 @@ class ECCInvestigator:
         positive_points = self.get_positive_points_on_elliptic_curve()
         last_calculated_point = None
 
+        traversed_points_dict = {}
+
         for current_point in positive_points:
             traversed_points = [current_point]
 
@@ -62,13 +64,14 @@ class ECCInvestigator:
                 except ZeroDivisionError:
                     break
 
-            print(f"For point ({current_point[0]} , {current_point[1]}), traversed points:")
+            #print(f"For point ({current_point[0]} , {current_point[1]}), traversed points:")
+            traversed_points_dict[current_point] = traversed_points[:]
 
-            point_counter = 0
-            for point in traversed_points:
-                point_counter += 1
-                print(f"Point {point_counter}: ({point[0]} , {point[1]})")
-            print("\n")
+            # point_counter = 0
+            # for point in traversed_points:
+            #     point_counter += 1
+            #     print(f"Point {point_counter}: ({point[0]} , {point[1]})")
+            # print("\n")
 
             if len(traversed_points) == len(positive_points):
                 primitive_points.append(current_point)
@@ -81,8 +84,7 @@ class ECCInvestigator:
 
                 if len(traversed_points) != 0:
                     raise RuntimeError("Error in point iteration: new point found or point traversed multiple times")
-
-        return primitive_points
+        return primitive_points, traversed_points_dict
 
     def double_point(self, point: Tuple[int, int]) -> Tuple[int, int]:
         if not self.is_curve_elliptic():
@@ -172,3 +174,38 @@ class ECCInvestigator:
                 return i
 
         return None
+    
+    # added method to check if curve is cyclic
+    def is_curve_primitive(self) -> bool:
+        return len(self.get_primitive_points_on_elliptic_curve()) == self.get_order() - 1
+    
+# random curve generator
+def random_curve():
+    primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31]
+    sanitycounter = 0
+    while sanitycounter < 1000:
+        a = random.randint(-30, 30)
+        b = random.randint(-30, 30)
+        p = random.choice(primes)
+
+        ecc = ECCInvestigator(a, b, p)
+        if ecc.is_curve_elliptic():
+            return a, b, p
+        sanitycounter += 1
+    print("Could not find a valid curve after 1000 tries")
+    return None, None, None
+    
+def random_cyclic_curve():
+    primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31]
+    sanitycounter = 0
+    while sanitycounter < 1000:
+        a = random.randint(-30, 30)
+        b = random.randint(-30, 30)
+        p = random.choice(primes)
+
+        ecc = ECCInvestigator(a, b, p)
+        if ecc.is_curve_elliptic() and ecc.is_curve_primitive():
+            return a, b, p
+        sanitycounter += 1
+    print("Could not find a valid curve after 1000 tries")
+    return None, None, None

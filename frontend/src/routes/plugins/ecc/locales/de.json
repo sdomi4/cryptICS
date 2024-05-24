@@ -1,0 +1,9 @@
+{
+    "title": "ECC",
+    "overviewtitle": "Übersicht",
+    "introtext": "Kryptographie basierend auf elliptischen Kurven ('ECC', 'Elliptic Curve Cryptography') ist ein zentraler Bestandteil von moderner asymmetrischer Kryptographie. Die Sicherheit von ECC beruht auf einer Art diskretem Logarithmusproblem. Einen wichtigen Vorteil von ECC gegenüber RSA ist eine deutlich kleinere Schlüsselgrösse bei vergleichbarer Sicherheit.",
+    "investigate": "Um eine Kurve auf elliptische Eigenschaften zu untersuchen oder Punkte auf einer elliptischen Kurve zu berechenen:",
+    "investigatetitle": "Untersuchen",
+    "practice": "Berechnungen Üben",
+    "practicetitle": "Üben"
+}

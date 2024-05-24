@@ -1,0 +1,9 @@
+{
+    "title": "ECC",
+    "overviewtitle": "Overview",
+    "introtext": "Elliptic Curve Cryptography (ECC) is a core part of modern asymmetric cryptography. The security is based on a kind of discrete logarithm problem. A key advantage of ECC compared to RSA is the smaller key size with comparable levels of security.",
+    "investigate": "To check a curve for elliptic properties, or calculate points on an elliptic curve:",
+    "investigatetitle": "Investigate",
+    "practice": "Practice ECC calculations",
+    "practicetitle": "Practice"   
+}

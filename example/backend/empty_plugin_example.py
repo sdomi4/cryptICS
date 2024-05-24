@@ -19,22 +19,16 @@ class Plugin():
     #
     # predefined tags:
     # - homepage: the starting point, dynamically added to the front page (with the extra field "description" for the text on the home page)
-    # - navbar: the subpages of the module, dynamically added to the navbar
     #
-    # tags can be added as needed for the subpages
+    # there are currently no forther uses for tags, but that would allow additional logic if needed
     endpoints = [
         {
             "uri": "/example",
             "tag": "homepage",
-            "description": "Group Theory"
-        },
-        {
-            "uri": "/example/learn",
-            "tag": "navbar"
-        },
-        {
-            "uri": "/example/practice",
-            "tag": "navbar"
+            "description": {
+                "de": "Beispiel",
+                "en": "Example"
+            }
         }
     ]
 

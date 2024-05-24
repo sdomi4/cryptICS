@@ -1,15 +1,23 @@
 <!-- from https://svelte.dev/repl/cf05bd4a4ca14fb8ace8b6cdebbb58da?version=4.2.17-->
 
 <script>
+    import { createEventDispatcher } from 'svelte';
     export let tabs = [];
     export let activeTabValue = 1;
-  
-    const handleClick = tabValue => () => (activeTabValue = tabValue);
+
+    const dispatch = createEventDispatcher();
+
+    const handleClick = tabValue => () => {
+        activeTabValue = tabValue;
+        dispatch('tabChange', { tabValue });
+    };
   </script>
   
   <ul>
   {#each tabs as tab}
       <li class={activeTabValue === tab.value ? 'active' : ''}>
+          <!-- svelte-ignore a11y-click-events-have-key-events -->
+          <!-- svelte-ignore a11y-no-static-element-interactions -->
           <span on:click={handleClick(tab.value)}>{tab.label}</span>
       </li>
   {/each}
@@ -17,7 +25,7 @@
   {#each tabs as tab}
       {#if activeTabValue == tab.value}
       <div class="box">
-          <svelte:component this={tab.component}/>
+          <svelte:component this={tab.component} {...tab.props}/>
       </div>
       {/if}
   {/each}
@@ -28,10 +36,11 @@
           border: 1px solid #dee2e6;
       border-radius: 0 0 .5rem .5rem;
       border-top: 0;
+      min-height: 400px;
       }
     ul {
       display: flex;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
       padding-left: 0;
       margin-bottom: 0;
       list-style: none;
@@ -48,6 +57,7 @@
       display: block;
       padding: 0.5rem 1rem;
       cursor: pointer;
+      text-wrap: nowrap;
     }
   
     span:hover {

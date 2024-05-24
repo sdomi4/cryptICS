@@ -1,0 +1,17 @@
+{
+    "title": "ECC",
+    "subpagetitle": "Elliptische Kurve untersuchen",
+    "formula": "Untersuchung der Elliptischen Kurve E über ",
+    "random": "Zufällige Kurve",
+    "elliptic_true": "Die Kurve <span style='color: green; font-weight: bold;'>E ist elliptisch.</span>",
+    "elliptic_false": "Die Kurve <span style='color: red; font-weight: bold;'>E ist nicht elliptisch.</span>",
+    "order": "Ordnung",
+    "allpoints": "Alle Punkte",
+    "positivepoints": "Positive Punkte",
+    "primitivepoints": "Primitive Punkte",
+    "pointlabel": "Punkt",
+    "steplabel": "Schritt",
+    "calculationdetails": "Berechnungsinfos",
+    "details_one": "Mit Punkt",
+    "details_two": " durchlaufene Punkte"
+}

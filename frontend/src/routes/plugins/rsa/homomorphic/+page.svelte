@@ -1,7 +1,6 @@
 <script>
     import '../../../../style/globalStyle.css'
     
-    import { onMount } from 'svelte';
     import { writable, derived } from 'svelte/store';
     import { title } from '$lib/title';
     import { backLink } from '$lib/title'
@@ -223,6 +222,7 @@
         display: flex;
         text-align: center;
         text-anchor: middle;
+        cursor: pointer;
     }
 
     .buttonarrow {

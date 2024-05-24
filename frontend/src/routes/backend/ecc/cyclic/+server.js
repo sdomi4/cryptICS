@@ -4,7 +4,7 @@ export async function GET({ }) {
     // Assuming the necessary parameters are passed as query parameters
     
 
-    const response = await fetch(`${API_BASE_URL}/plugins/ecc/random`, {
+    const response = await fetch(`${API_BASE_URL}/plugins/ecc/cyclic`, {
         method: 'GET',
         headers: {
             'accept': 'application/json'
