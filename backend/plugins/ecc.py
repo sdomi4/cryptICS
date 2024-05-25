@@ -5,8 +5,10 @@
 
 # To export API endpoints
 from fastapi import APIRouter, HTTPException
+from Crypto.Random import random
 
 from backend.util_internal.ecc_inspector import random_curve, random_cyclic_curve, ECCInvestigator
+from backend.util_internal.ecc_exercise import generate_practice_points, check_nonsingularity, check_point_on_curve
 
 from pydantic import BaseModel
 
@@ -27,6 +29,18 @@ class InspectResponse(BaseModel):
     primitive_points: list
     order: int
     calculation_info: dict
+
+class ExerciseResponse(BaseModel):
+    a: int
+    b: int
+    p: int
+    practice_points: tuple
+    m: tuple
+    k: tuple
+    q: tuple
+    inverse_table: list
+    nonsingularity: int
+    check_point: tuple
 
 # All logic should be contained in the Plugin class, for plugin discovery/import
 class Plugin():
@@ -59,7 +73,7 @@ class Plugin():
     # get random elliptic curve for exercise
     @router.get("/ecc/random", response_model=CurveResponse)
     def run():
-        a, b, p = random_curve()
+        a, b, p, order = random_curve()
 
         if a is None:
             raise HTTPException(status_code=500, detail="Could not generate random curve")
@@ -109,4 +123,26 @@ class Plugin():
             "primitive_points": primitive_points,
             "order": order,
             "calculation_info": calculation_info
+        }
+    
+    @router.get("/ecc/practice", response_model=ExerciseResponse)
+    def run():
+        a, b, p, order = random_curve()
+        ecc = ECCInvestigator(a, b, p)
+        x, y = random.choice(ecc.get_positive_points_on_elliptic_curve())
+        practice_points = generate_practice_points(a, b, p)
+        nonsingularity = check_nonsingularity(a, b, p)
+        check_point = check_point_on_curve(x, y, a, b, p)
+
+        return {
+            "a": a,
+            "b": b,
+            "p": p,
+            "practice_points": practice_points["practice_points"],
+            "m": practice_points["m"],
+            "k": practice_points["k"],
+            "q": practice_points["q"],
+            "inverse_table": practice_points["inverse_table"],
+            "nonsingularity": nonsingularity,
+            "check_point": check_point
         }

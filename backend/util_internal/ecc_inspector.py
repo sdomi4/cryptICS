@@ -1,4 +1,5 @@
-import math, random
+import math
+from Crypto.Random import random
 from typing import List, Tuple
 
 
@@ -94,7 +95,7 @@ class ECCInvestigator:
         denominator = 2 * point[1]
 
         if denominator == 0:
-            raise ZeroDivisionError("Division by zero when calculating point doubling")
+            return (None, None)
 
         if denominator < 0:
             denominator *= -1
@@ -120,14 +121,18 @@ class ECCInvestigator:
         if not self.is_curve_elliptic():
             raise RuntimeError("Curve mustbe elliptic")
 
+        if point1 == (None, None):
+            return point2
+        if point2 == (None, None):
+            return point1
         if point1 == point2:
-            raise RuntimeError("Stop adding start doubling")
+            return self.double_point(point1)
 
         numerator = point2[1] - point1[1]
         denominator = point2[0] - point1[0]
 
         if denominator == 0:
-            raise ZeroDivisionError("Division by zero when calculating point addition")
+            return (None, None)
 
         if denominator < 0:
             denominator *= -1
@@ -179,9 +184,29 @@ class ECCInvestigator:
     def is_curve_primitive(self) -> bool:
         return len(self.get_primitive_points_on_elliptic_curve()) == self.get_order() - 1
     
+    def scalar_multiplication(self, scalar: int, point: Tuple[int, int]) -> Tuple[int, int]:
+        if not self.is_curve_elliptic():
+            raise RuntimeError("Curve must be elliptic")
+        
+        if scalar == 0:
+            return (0, 0)
+        if scalar == 1:
+            return point
+        
+        result = (None, None)
+        addend = point
+
+        while scalar:
+            if scalar & 1:
+                result = self.add_two_points(result, addend)
+            addend = self.double_point(addend)
+            scalar >>= 1
+        return result
+
+    
 # random curve generator
 def random_curve():
-    primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31]
+    primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]
     sanitycounter = 0
     while sanitycounter < 1000:
         a = random.randint(-30, 30)
@@ -190,13 +215,13 @@ def random_curve():
 
         ecc = ECCInvestigator(a, b, p)
         if ecc.is_curve_elliptic():
-            return a, b, p
+            return a, b, p, ecc.get_order()
         sanitycounter += 1
     print("Could not find a valid curve after 1000 tries")
     return None, None, None
     
 def random_cyclic_curve():
-    primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31]
+    primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]
     sanitycounter = 0
     while sanitycounter < 1000:
         a = random.randint(-30, 30)
@@ -209,3 +234,15 @@ def random_cyclic_curve():
         sanitycounter += 1
     print("Could not find a valid curve after 1000 tries")
     return None, None, None
+
+def generate_private_key(order: int):
+    return random.randint(1, order - 1)
+
+def generate_base_point(a: int, b: int, p: int):
+    ecc = ECCInvestigator(a, b, p)
+    points = ecc.get_primitive_points_on_elliptic_curve()[0]
+    return random.choice(points)
+
+def generate_public_key(private_key: int, a: int, b: int, p: int, base_point: Tuple[int, int]):
+    ecc = ECCInvestigator(a, b, p)
+    return ecc.scalar_multiplication(private_key, base_point)

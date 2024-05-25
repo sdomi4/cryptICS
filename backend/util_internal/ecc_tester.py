@@ -1,3 +1,4 @@
+# test file to compare outputs with Java ECC_Untersucher
 from ecc_inspector import ECCInvestigator
 a = 4
 b = 0

@@ -1,3 +1,25 @@
 {
-    
+    "title": "ECC",
+    "subpagetitle": "Üben",
+    "given": "Gegeben ist die Elliptische Kurve E: y<sup>2</sup> &equiv; x<sup>3</sup> + ",
+    "given2": "x + ",
+    "given3": "über",
+    "curvecheck": "Überprüfen Sie, ob die Kurve E eine elliptische Kurve ist.",
+    "curvecheckresult": "Resultat der Überprüfung der nicht-singularitätsbedingung:",
+    "pointcheck": "Überprüfen Sie, ob Punkt P",
+    "pointcheck2": "auf der Kurve E liegt.",
+    "pointcheckresult": "Resultat, wenn Punkt P in der Gleichung eingesetzt wird:",
+    "calculation": "Von einem Punkt P, der auf der Kurve liegt kennt man die Koordinaten von",
+    "calculation2": "*P = Q",
+    "calculation3": "und",
+    "calculation4": "*P = R",
+    "calculation5": "Bestimmen Sie die Koordinaten von Punkt S =",
+    "calculation6": "*P.",
+    "inversion": "Der Punkt T",
+    "inversion2": "liegt auf der Kurve. Bestimmen Sie die Koordinaten des Punktes U = -T.",
+    "estimation": "Sie bestimmen alle Punkte der Kurve E und kommen auf die Anzahl",
+    "estimation2": "Kann diese Zahl stimmen?",
+    "estimationresult": "Gemäss Hasse-Theorem kann die Anzahl der Punkte auf der Kurve E zwischen",
+    "estimationresult2": "und",
+    "estimationresult3": "liegen."
 }

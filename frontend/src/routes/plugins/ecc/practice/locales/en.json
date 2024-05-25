@@ -1,3 +1,25 @@
 {
-    
+    "title": "ECC",
+    "subpagetitle": "Practice",
+    "given": "Take elliptic curve E: y<sup>2</sup> &equiv; x<sup>3</sup> + ",
+    "given2": "x + ",
+    "given3": "over",
+    "curvecheck": "Check, if the curve E is an elliptic curve.",
+    "curvecheckresult": "Result of the non-singularity test:",
+    "pointcheck": "Check, if point P",
+    "pointcheck2": "is on the curve E.",
+    "pointcheckresult": "Result of inserting point P to the curve equation",
+    "calculation": "Based on Point P, which is on the curve, the coordinates of",
+    "calculation2": "*P = Q",
+    "calculation3": "and",
+    "calculation4": "*P = R",
+    "calculation5": "are known. Determine the coordinates of point S =",
+    "calculation6": "*P.",
+    "inversion": "Point T",
+    "inversion2": "is on the curve. Determine the coordinates of point U = -T.",
+    "estimation": "You determine all points of curve E and get a total of",
+    "estimation2": "points. Can this number be correct?",
+    "estimationresult": "Based on the Hasse theorem, the number of points is between",
+    "estimationresult2": "and",
+    "estimationresult3": "points."
 }
