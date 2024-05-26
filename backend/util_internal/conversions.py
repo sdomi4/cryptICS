@@ -24,3 +24,8 @@ def str_to_hex(data: str) -> str:
 
 def binary_to_hex(binary_data: str) -> str:
     return hex(int(binary_data, 2))[2:]
+
+def binary_to_bytes(binary_data: str) -> bytes:
+    hex_data = binary_to_hex(binary_data)
+    print(hex_data)
+    return bytes.fromhex(hex_data)

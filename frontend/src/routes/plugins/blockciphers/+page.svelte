@@ -38,7 +38,7 @@
     <div class="sectioncontainer">
       {translation.diffconf}
       <div class="sectionlink">
-        <a href='/plugins/blockciphers/diffusion-confusion'>{translation.diffconftitle}</a>  
+        <a href='/plugins/blockciphers/avalanche'>{translation.diffconftitle}</a>  
       </div>
     </div>
     <div class="sectioncontainer">

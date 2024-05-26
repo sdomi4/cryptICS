@@ -18,11 +18,13 @@ def aes_encrypt(data: str, mode: str, key: str = None, iv: str = None, nonce: st
             cipher_mode = AES.MODE_CFB
         case _:
             return None
+
     if not isinstance(data, bytes):
         data = data.encode()
-    
     if key is None:
         key = get_random_bytes(16)
+    elif not isinstance(key, bytes):
+        key = bytes.fromhex(key)
     if iv is not None:
         cipher = AES.new(key, cipher_mode, iv=iv)
     elif nonce is not None:

@@ -12,7 +12,7 @@ from Crypto.Random.random import randrange
 
 from backend.util_internal.aes import aes_encrypt, aes_decrypt
 from backend.util_internal.conversions import str_to_binary, hex_to_binary
-from backend.util_internal.conversions import binary_to_blocks, hex_to_blocks
+from backend.util_internal.conversions import binary_to_blocks, hex_to_blocks, binary_to_bytes
 
 class EncryptRequest(BaseModel):
     mode: str
@@ -27,6 +27,12 @@ class FaultPostRequest(BaseModel):
     iv: str
     nonce: str
 
+class AvalancheRequest(BaseModel):
+    cleartext: list[str]
+    key: str
+    flipped_key_bits: list[int]
+    flipped_cleartext_bits: dict
+
 class FaultPostResponse(BaseModel):
     cleartext: dict
 
@@ -38,12 +44,11 @@ class EncryptResponse(BaseModel):
 class CipherResponse(BaseModel):
     ciphers: list[str]
 
-class ConfusionDiffusionResponse(BaseModel):
+class AvalancheResponse(BaseModel):
     cleartext: list[str]
     key: str
     ciphertext: list[str]
-    diffusion: dict
-    confusion: dict
+    hamming: int
 
 class FaultGetResponse(BaseModel):
     cleartext: list[str]
@@ -119,39 +124,57 @@ class Plugin():
             }
         }
     
-    @router.get("/blockciphers/confusion-diffusion", response_model=ConfusionDiffusionResponse)
+    @router.get("/blockciphers/avalanche", response_model=AvalancheResponse)
     def run():
         random_input = get_random_bytes(32)
         random_key = get_random_bytes(16)
 
-        # key with 1 random bit changed
-        confusion_key = bytearray(random_key)
-        confusion_key[randrange(0, 15)] ^= 1 << randrange(0, 7)
-
-        diffusion_input = bytearray(random_input)
-        diffusion_input[randrange(0, 15)] ^= 1 << randrange(0, 7)
-
         encrypt_response = aes_encrypt(random_input, "ECB", random_key)
-        confusion_response = aes_encrypt(random_input, "ECB", bytes(confusion_key))
-        diffusion_repsonse = aes_encrypt(bytes(diffusion_input), "ECB", random_key)
 
         return {
             "cleartext": binary_to_blocks(hex_to_binary(random_input.hex()), 128),
-            "key": random_key.hex(),
+            "key": hex_to_binary(random_key.hex()),
             "ciphertext": binary_to_blocks(hex_to_binary(encrypt_response["ciphertext"]), 128),
-            "diffusion": {
-                "cleartext": binary_to_blocks(hex_to_binary(diffusion_input.hex()), 128),
-                "ciphertext": binary_to_blocks(hex_to_binary(diffusion_repsonse["ciphertext"]), 128)
-            },
-            "confusion": {
-                "key": confusion_key.hex(),
-                "ciphertext": binary_to_blocks(hex_to_binary(confusion_response["ciphertext"]), 128)
-            }
+            "hamming": 0
+        }
+
+    @router.post("/blockciphers/avalanche", response_model=AvalancheResponse)
+    def run(avalanche_request: AvalancheRequest):
+        print(avalanche_request.flipped_cleartext_bits)
+        cleartext = avalanche_request.cleartext
+        key = avalanche_request.key
+        
+        key_bytes = binary_to_bytes(key)
+
+        original_encrypt = aes_encrypt(binary_to_bytes(''.join(cleartext)), "ECB", key_bytes)
+        original_binary = hex_to_binary(original_encrypt["ciphertext"])
+
+        for index in avalanche_request.flipped_key_bits:
+                key = key[:int(index)] + str(int(key[index]) ^ 1) + key[index+1:]
+        key_bytes = binary_to_bytes(key)
+        # flip all clicked bits in the cleartext
+        for block in avalanche_request.flipped_cleartext_bits:
+            for flipped_bit in avalanche_request.flipped_cleartext_bits[block]:
+                cleartext[int(block)] = cleartext[int(block)][:int(flipped_bit)] + str(int(cleartext[int(block)][int(flipped_bit)])^1) + cleartext[int(block)][int(flipped_bit)+1:]
+
+        # merge blocks back into a single string
+        cleartext = ''.join(cleartext)
+        cleartext_bytes = binary_to_bytes(cleartext)
+        
+        encrypt_response = aes_encrypt(cleartext_bytes, "ECB", key_bytes)
+        modified_binary = hex_to_binary(encrypt_response["ciphertext"])
+
+        hamming = sum(c1 != c2 for c1, c2 in zip(original_binary, modified_binary))
+
+        return {
+            "cleartext": binary_to_blocks(hex_to_binary(cleartext), 128),
+            "key": key,
+            "ciphertext": binary_to_blocks(hex_to_binary(encrypt_response["ciphertext"]), 128),
+            "hamming": hamming
         }
     
     @router.post("/blockciphers/faults", response_model=FaultPostResponse)
     def run(fault_request: FaultPostRequest):
-        print(fault_request.fault_indexes)
         ecb_ciphertext = fault_request.ciphertext["ECB"]
         cbc_ciphertext = fault_request.ciphertext["CBC"]
         ctr_ciphertext = fault_request.ciphertext["CTR"]
@@ -160,7 +183,6 @@ class Plugin():
 
         # flip a bit at specified indexes
         for block in fault_request.fault_indexes:
-            print("checking block", block)
             print(fault_request.fault_indexes[block])
             for index in fault_request.fault_indexes[block]:
                 # this unholy garbage took me like 2 hours

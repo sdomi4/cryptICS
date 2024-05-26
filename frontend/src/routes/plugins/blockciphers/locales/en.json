@@ -1,9 +1,9 @@
 {
-    "diffconftitle": "Diffusion & Confusion",
+    "diffconftitle": "Avalanche Effect",
     "ciphermodetitle": "Error Propagation",
     "title": "Block Ciphers",
     "overviewtitle": "Overview",
     "introtext": "Block ciphers and their modes are a core part of cryptography. Different modes have different strengths and weaknesses.",
-    "diffconf": "See how the principles of diffusion and confusion apply to block ciphers.",
+    "diffconf": "See how the avalanche effect applies to block ciphers.",
     "modes": "Learn about the different cipher modes of block ciphers and their behavior."
 }
