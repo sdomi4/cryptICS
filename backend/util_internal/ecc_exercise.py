@@ -1,3 +1,4 @@
+from math import sqrt
 from backend.util_internal.ecc_inspector import ECCInvestigator
 from Crypto.Random import random
 
@@ -56,3 +57,9 @@ def check_point_on_curve(x: int, y: int, a: int, b: int, p: int):
     left = pow(y, 2) % p
     right = (pow(x, 3) + a * x + b) % p
     return left, right
+
+def inverse_point(x: int, y: int, p: int):
+    return x, -y % p
+
+def hasse_theorem(p: int):
+    return p+1 - 2*(sqrt(p)), p+1 + 2*(sqrt(p))

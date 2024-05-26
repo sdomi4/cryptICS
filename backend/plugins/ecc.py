@@ -8,7 +8,7 @@ from fastapi import APIRouter, HTTPException
 from Crypto.Random import random
 
 from backend.util_internal.ecc_inspector import random_curve, random_cyclic_curve, ECCInvestigator
-from backend.util_internal.ecc_exercise import generate_practice_points, check_nonsingularity, check_point_on_curve
+from backend.util_internal.ecc_exercise import generate_practice_points, check_nonsingularity, check_point_on_curve, inverse_point, hasse_theorem
 
 from pydantic import BaseModel
 
@@ -41,6 +41,11 @@ class ExerciseResponse(BaseModel):
     inverse_table: list
     nonsingularity: int
     check_point: tuple
+    point_P: tuple
+    point_T: tuple
+    point_U: tuple
+    hasse_bounds: tuple
+    estimation_number: int
 
 # All logic should be contained in the Plugin class, for plugin discovery/import
 class Plugin():
@@ -109,6 +114,7 @@ class Plugin():
             primitives = ecc.get_primitive_points_on_elliptic_curve()
             primitive_points = primitives[0]
             calculation_info = primitives[1]
+            
         else:
             order = None
             all_points = []
@@ -127,22 +133,41 @@ class Plugin():
     
     @router.get("/ecc/practice", response_model=ExerciseResponse)
     def run():
-        a, b, p, order = random_curve()
-        ecc = ECCInvestigator(a, b, p)
-        x, y = random.choice(ecc.get_positive_points_on_elliptic_curve())
-        practice_points = generate_practice_points(a, b, p)
-        nonsingularity = check_nonsingularity(a, b, p)
-        check_point = check_point_on_curve(x, y, a, b, p)
+        # some randomly generated curves / questions will run into modular inverses that don't exist
+        # I could try understanding the math and fixing it, but this way is more my style
+        sanitycounter = 0
+        while sanitycounter < 1000:
+            sanitycounter += 1
+            try:
+                a, b, p, order = random_curve()
+                ecc = ECCInvestigator(a, b, p)
+                point_to_check = random.choice(ecc.get_positive_points_on_elliptic_curve())
+                point_to_inverse = random.choice(ecc.get_positive_points_on_elliptic_curve())
+                practice_points = generate_practice_points(a, b, p)
+                nonsingularity = check_nonsingularity(a, b, p)
+                check_point = check_point_on_curve(point_to_check[0], point_to_check[1], a, b, p)
+                inversed_point = inverse_point(point_to_inverse[0], point_to_inverse[1], p)
+                hasse_bounds = hasse_theorem(p)
+                hasse_bounds = (int(hasse_bounds[0]), int(hasse_bounds[1]))
 
-        return {
-            "a": a,
-            "b": b,
-            "p": p,
-            "practice_points": practice_points["practice_points"],
-            "m": practice_points["m"],
-            "k": practice_points["k"],
-            "q": practice_points["q"],
-            "inverse_table": practice_points["inverse_table"],
-            "nonsingularity": nonsingularity,
-            "check_point": check_point
-        }
+            except ZeroDivisionError:
+                continue
+
+            return {
+                "a": a,
+                "b": b,
+                "p": p,
+                "practice_points": practice_points["practice_points"],
+                "m": practice_points["m"],
+                "k": practice_points["k"],
+                "q": practice_points["q"],
+                "inverse_table": practice_points["inverse_table"],
+                "nonsingularity": nonsingularity,
+                "check_point": check_point,
+                "point_P": point_to_check,
+                "point_T": point_to_inverse,
+                "point_U": inversed_point,
+                "estimation_number": random.randint(int(hasse_bounds[0]), int(hasse_bounds[1])),
+                "hasse_bounds": hasse_bounds
+            }
+        raise HTTPException(status_code=500, detail="Spent 1000 tries generating a valid exercise, giving up, just refresh")

@@ -4,9 +4,9 @@
     "given": "Take elliptic curve E: y<sup>2</sup> &equiv; x<sup>3</sup> + ",
     "given2": "x + ",
     "given3": "over",
-    "curvecheck": "Check, if the curve E is an elliptic curve.",
+    "curvecheck": "Check if the curve E is an elliptic curve.",
     "curvecheckresult": "Result of the non-singularity test:",
-    "pointcheck": "Check, if point P",
+    "pointcheck": "Check if point P",
     "pointcheck2": "is on the curve E.",
     "pointcheckresult": "Result of inserting point P to the curve equation",
     "calculation": "Based on Point P, which is on the curve, the coordinates of",
@@ -21,5 +21,7 @@
     "estimation2": "points. Can this number be correct?",
     "estimationresult": "Based on the Hasse theorem, the number of points is between",
     "estimationresult2": "and",
-    "estimationresult3": "points."
+    "estimationresult3": "points.",
+    "next": "Next",
+    "inversetable": "Reciprocal value table, if needed"
 }

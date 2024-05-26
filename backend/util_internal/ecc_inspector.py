@@ -90,6 +90,9 @@ class ECCInvestigator:
     def double_point(self, point: Tuple[int, int]) -> Tuple[int, int]:
         if not self.is_curve_elliptic():
             raise RuntimeError("Curve must be elliptic")
+        
+        if point == (None, None):
+            return (None, None)  # Point at infinity
 
         numerator = 3 * pow(point[0], 2) + self.a
         denominator = 2 * point[1]

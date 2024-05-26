@@ -21,5 +21,7 @@
     "estimation2": "Kann diese Zahl stimmen?",
     "estimationresult": "Gemäss Hasse-Theorem kann die Anzahl der Punkte auf der Kurve E zwischen",
     "estimationresult2": "und",
-    "estimationresult3": "liegen."
+    "estimationresult3": "liegen.",
+    "next": "Weiter",
+    "inversetable": "Kehrwerttabelle, falls benötigt"
 }
