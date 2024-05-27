@@ -205,7 +205,6 @@ class ECCInvestigator:
             addend = self.double_point(addend)
             scalar >>= 1
         return result
-
     
 # random curve generator
 def random_curve():

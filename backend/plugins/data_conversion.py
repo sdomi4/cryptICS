@@ -31,6 +31,12 @@ class BothResponse(BaseModel):
     binary: str
     hex: str
 
+class BlockRequest(BaseModel):
+    blocks: list[str]
+
+class BlockResponse(BaseModel):
+    blocks: list[str]
+
 # All logic should be contained in the Plugin class, for plugin discovery/import
 class Plugin():
 
@@ -82,3 +88,21 @@ class Plugin():
             "hex": binascii.hexlify(bytes(both_request.data, encoding="utf8"))
         } 
         return response
+    
+    @router.post("/binaryToHexBlocks", response_model=BlockResponse)
+    def run(block_request: BlockRequest):
+        hex_blocks = []
+        for block in block_request.blocks:
+            hex_blocks.append(conversions.binary_to_hex(block))
+        return {
+            "blocks": hex_blocks
+        }
+    
+    @router.post("/hexToBinaryBlocks", response_model=BlockResponse)
+    def run(block_request: BlockRequest):
+        binary_blocks = []
+        for block in block_request.blocks:
+            binary_blocks.append(conversions.hex_to_binary(block))
+        return {
+            "blocks": binary_blocks
+        }
