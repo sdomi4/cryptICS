@@ -1,9 +1,9 @@
 <script>
-    import '../../../../style/globalStyle.css'
-    
+    import '../../../../style/globalStyle.css';
     import { title } from '$lib/title';
     import { backLink } from '$lib/title';
-    import { pageTitle } from '$lib/stores.js'
+    import { pageTitle } from '$lib/stores.js';
+    import { onMount } from 'svelte';
   
     import de from './locales/de.json';
     import en from './locales/en.json';
@@ -14,12 +14,14 @@
 
     export let data;
 
-    // use CBC as standin for all modes
+    // use CBC as stand-in for all modes
     let ciphertext = data.body.ciphertext.CBC;
-    let originalCleartext = data.body.cleartext;
+    let originalCleartextHex = data.body.cleartext.hex;
+    let originalCleartextBinary = data.body.cleartext.binary;
     let key = data.body.key;
     let iv = data.body.iv;
     let nonce = data.body.nonce;
+    let clear;
 
     let loading = false;
     let showFaults = false;
@@ -30,30 +32,40 @@
         3: []
     };
     let cleartexts = {};
-    let clear = {
-        ECB: originalCleartext,
-        CBC: originalCleartext,
-        OFB: originalCleartext,
-        CFB: originalCleartext,
-        CTR: originalCleartext
+    let clearHex = {
+        ECB: originalCleartextHex,
+        CBC: originalCleartextHex,
+        OFB: originalCleartextHex,
+        CFB: originalCleartextHex,
+        CTR: originalCleartextHex
     };
-
-    let binary = {
+    let clearBinary = {
+        ECB: originalCleartextBinary,
+        CBC: originalCleartextBinary,
+        OFB: originalCleartextBinary,
+        CFB: originalCleartextBinary,
+        CTR: originalCleartextBinary
+    };
+    let showBinary = {
         ECB: false,
         CBC: false,
-        OFB: true,
-        CFB: false,
-        CTR: true
-    }
-    $: {
-        clear = cleartexts?.cleartext || clear;
+        OFB: false,
+        CFB: true, // Default to binary
+        CTR: true  // Default to binary
+    };
 
-        // swap hex to binary for OFB and CTR by default
-        for (let mode in binary) {
-            if (binary[mode]) {
-                handleToggle(clear[mode]);
-            }
-        }
+    $: {
+        clearHex.ECB = cleartexts.cleartext?.ECB.hex || originalCleartextHex;
+        clearHex.CBC = cleartexts.cleartext?.CBC.hex || originalCleartextHex;
+        clearHex.OFB = cleartexts.cleartext?.OFB.hex || originalCleartextHex;
+        clearHex.CFB = cleartexts.cleartext?.CFB.hex || originalCleartextHex;
+        clearHex.CTR = cleartexts.cleartext?.CTR.hex || originalCleartextHex;
+
+        clearBinary.ECB = cleartexts.cleartext?.ECB.binary || originalCleartextBinary;
+        clearBinary.CBC = cleartexts.cleartext?.CBC.binary || originalCleartextBinary;
+        clearBinary.OFB = cleartexts.cleartext?.OFB.binary || originalCleartextBinary;
+        clearBinary.CFB = cleartexts.cleartext?.CFB.binary || originalCleartextBinary;
+        clearBinary.CTR = cleartexts.cleartext?.CTR.binary || originalCleartextBinary;
     }
 
     let translation;
@@ -63,8 +75,6 @@
         backLink.set('/plugins/blockciphers');
         pageTitle.set(translation.faulttitle);
     }
-
-    
 
     async function handleLetterClick(letter, index, block) {
         loading = true;
@@ -95,150 +105,131 @@
                 'Accept': 'application/json'
             },
             body: payload
-        })
+        });
 
         cleartexts = await response.json();
-        //console.log(cleartexts.cleartext);
         loading = false;
         showFaults = true;
     }
   
-    async function handleToggle(mode) {
-        switch (mode) {
-            case 'ECB':
-                if (binary.ECB) {
-                    clear.ECB = await hexToBinary(clear.ECB);
-                } else {
-                    clear.ECB = await binaryToHex(clear.ECB);
-                }
-                break;
-            case 'CBC':
-                if (binary.CBC) {
-                    clear.CBC = await hexToBinary(clear.CBC);
-                } else {
-                    clear.CBC = await binaryToHex(clear.CBC);
-                }
-                break;
-            case 'OFB':
-                if (binary.OFB) {
-                    clear.OFB = await hexToBinary(clear.OFB);
-                } else {
-                    clear.OFB = await binaryToHex(clear.OFB);
-                }
-                break;
-            case 'CFB':
-                if (binary.CFB) {
-                    clear.CFB = await hexToBinary(clear.CFB);
-                } else {
-                    clear.CFB = await binaryToHex(clear.CFB);
-                }
-                break;
-            case 'CTR':
-                if (binary.CTR) {
-                    clear.CTR = await hexToBinary(clear.CTR);
-                } else {
-                    clear.CTR = await binaryToHex(clear.CTR);
-                }
-                break;    
-        }
+    function toggleBinaryView(mode) {
+        showBinary[mode] = !showBinary[mode];
     }
-
-    async function hexToBinary(hex) {
-        const payload = JSON.stringify({
-            blocks: hex
-        });
-        const response = await fetch('/backend/hexToBinary', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: payload
-        });
-
-        const converted = await response.json();
-        return converted.blocks;
-    }
-
-    async function binaryToHex(binary) {
-        const payload = JSON.stringify({
-            blocks: binary
-        });
-        const response = await fetch('/backend/binaryToHex', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: payload
-        });
-
-        const converted = await response.json();
-        return converted.blocks;
-    }
-
+  
+    onMount(() => {
+    });
 </script>
 
 <body>
     <div class="bodycontainer">
-        
         <div class="introcontainer">
             <h1>{translation.faulttitle}</h1>
             <p>{translation.faultdescription}</p>
         </div>
         <div class="visualisationcontainer">
-        <h2>{translation.ciphertext}</h2>
-        <div class="ciphertextcontainer">
-            <ClickableBlockViewer binaryblocks={ciphertext} onLetterClick={handleLetterClick}/>
-        </div>
-        <div>
-            <div class="decryptionspace">
-                <h2>{translation.decrypted}</h2>
+            <h2>{translation.ciphertext}</h2>
+            <div class="ciphertextcontainer">
+                <ClickableBlockViewer binaryblocks={ciphertext} onLetterClick={handleLetterClick}/>
             </div>
-            <div class="faultcontainer">
-                <div id="ECB" class="cleartextcontainer">
-                    <span class="modetitle">ECB</span>
-                    <ComparisonBlockViewer original={originalCleartext} modified={clear.ECB}/>
-                    <label class="switch">
-                        <input type="checkbox">
-                        <span class="slider"></span>
-                    </label>
+            <div>
+                <div class="decryptionspace">
+                    <h2>{translation.decrypted}</h2>
                 </div>
-                <div id="CBC" class="cleartextcontainer">
-                    <span class="modetitle">CBC</span>
-                    <ComparisonBlockViewer original={originalCleartext} modified={clear.CBC}/>
-                    <label class="switch">
-                        <input type="checkbox">
-                        <span class="slider"></span>
-                    </label>
+                <div class="faultcontainer">
+                    <div id="ECB" class="cleartextcontainer">
+                        <span class="modetitle">ECB</span>
+                        {#if showBinary.ECB}
+                            <ComparisonBlockViewer original={originalCleartextBinary} modified={clearBinary.ECB}/>
+                        {:else}
+                            <ComparisonBlockViewer original={originalCleartextHex} modified={clearHex.ECB}/>
+                        {/if}
+                        <label class="switch">
+                            <input type="checkbox" on:change={() => toggleBinaryView('ECB')}>
+                            <span class="slider">
+                                {#if showBinary.ECB}
+                                    <span class="text text-right">Binary</span>
+                                {:else}
+                                    <span class="text text-left">Hex</span>
+                                {/if}
+                            </span>
+                        </label>
+                    </div>
+                    <div id="CBC" class="cleartextcontainer">
+                        <span class="modetitle">CBC</span>
+                        {#if showBinary.CBC}
+                            <ComparisonBlockViewer original={originalCleartextBinary} modified={clearBinary.CBC}/>
+                        {:else}
+                            <ComparisonBlockViewer original={originalCleartextHex} modified={clearHex.CBC}/>
+                        {/if}
+                        <label class="switch">
+                            <input type="checkbox" on:change={() => toggleBinaryView('CBC')}>
+                            <span class="slider">
+                                {#if showBinary.CBC}
+                                    <span class="text text-right">Binary</span>
+                                {:else}
+                                    <span class="text text-left">Hex</span>
+                                {/if}
+                            </span>
+                        </label>
+                    </div>
+                    <div id="OFB" class="cleartextcontainer">
+                        <span class="modetitle">OFB</span>
+                        {#if showBinary.OFB}
+                            <ComparisonBlockViewer original={originalCleartextBinary} modified={clearBinary.OFB}/>
+                        {:else}
+                            <ComparisonBlockViewer original={originalCleartextHex} modified={clearHex.OFB}/>
+                        {/if}
+                        <label class="switch">
+                            <input type="checkbox" on:change={() => toggleBinaryView('OFB')}>
+                            <span class="slider">
+                                {#if showBinary.OFB}
+                                    <span class="text text-right">Binary</span>
+                                {:else}
+                                    <span class="text text-left">Hex</span>
+                                {/if}
+                            </span>
+                        </label>
+                    </div>
+                    <div id="CFB" class="cleartextcontainer">
+                        <span class="modetitle">CFB</span>
+                        {#if showBinary.CFB}
+                            <ComparisonBlockViewer original={originalCleartextBinary} modified={clearBinary.CFB}/>
+                        {:else}
+                            <ComparisonBlockViewer original={originalCleartextHex} modified={clearHex.CFB}/>
+                        {/if}
+                        <label class="switch">
+                            <input type="checkbox" on:change={() => toggleBinaryView('CFB')}>
+                            <span class="slider">
+                                {#if showBinary.CFB}
+                                    <span class="text text-left">Binary</span>
+                                {:else}
+                                    <span class="text text-right">Hex</span>
+                                {/if}
+                            </span>
+                        </label>
+                    </div>
+                    <div id="CTR" class="cleartextcontainer">
+                        <span class="modetitle">CTR</span>
+                        {#if showBinary.CTR}
+                            <ComparisonBlockViewer original={originalCleartextBinary} modified={clearBinary.CTR}/>
+                        {:else}
+                            <ComparisonBlockViewer original={originalCleartextHex} modified={clearHex.CTR}/>
+                        {/if}
+                        <label class="switch">
+                            <input type="checkbox" on:change={() => toggleBinaryView('CTR')}>
+                            <span class="slider">
+                                {#if showBinary.CTR}
+                                    <span class="text text-left">Binary</span>
+                                {:else}
+                                    <span class="text text-right">Hex</span>
+                                {/if}
+                            </span>
+                        </label>
+                    </div>
                 </div>
-                <div id="OFB" class="cleartextcontainer">
-                    <span class="modetitle">OFB</span>
-                    <ComparisonBlockViewer original={originalCleartext} modified={clear.OFB}/>
-                    <label class="switch" on:click={handleToggle("OFB")}>
-                        <input type="checkbox">
-                        <span class="slider"></span>
-                    </label>
+                <div class="foottext">
+                    {translation.faultdetails}
                 </div>
-                <div id="CFB" class="cleartextcontainer">
-                    <span class="modetitle">CFB</span>
-                    <ComparisonBlockViewer original={originalCleartext} modified={clear.CFB}/>
-                    <label class="switch">
-                        <input type="checkbox">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-                <div id="CTR" class="cleartextcontainer">
-                    <span class="modetitle">CTR</span>
-                    <ComparisonBlockViewer original={originalCleartext} modified={clear.CTR}/>
-                    <label class="switch">
-                        <input type="checkbox">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-            </div>
-            <div class="foottext">
-                {translation.faultdetails}
             </div>
         </div>
     </div>
@@ -287,7 +278,7 @@
     .switch {
         position: relative;
         display: inline-block;
-        width: 60px;
+        width: 100px; /* Adjusted width for text */
         height: 34px;
     }
 
@@ -307,6 +298,9 @@
         background-color: #ccc;
         -webkit-transition: .4s;
         transition: .4s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .slider:before {
@@ -330,8 +324,24 @@
     }
 
     input:checked + .slider:before {
-        -webkit-transform: translateX(26px);
-        -ms-transform: translateX(26px);
-        transform: translateX(26px);
+        -webkit-transform: translateX(66px); /* Adjusted transform for text */
+        -ms-transform: translateX(66px); /* Adjusted transform for text */
+        transform: translateX(66px); /* Adjusted transform for text */
+    }
+
+    .slider .text {
+        position: absolute;
+        width: 100%;
+        text-align: center;
+    }
+
+    .slider .text-left {
+        right: 10px;
+        text-align: right;
+    }
+
+    .slider .text-right {
+        left: 10px;
+        text-align: left;
     }
 </style>

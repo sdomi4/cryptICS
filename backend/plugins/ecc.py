@@ -9,6 +9,7 @@ from Crypto.Random import random
 
 from backend.util_internal.ecc_inspector import random_curve, random_cyclic_curve, ECCInvestigator
 from backend.util_internal.ecc_exercise import generate_practice_points, check_nonsingularity, check_point_on_curve, inverse_point, hasse_theorem
+from sympy import isprime
 
 from pydantic import BaseModel
 
@@ -29,6 +30,7 @@ class InspectResponse(BaseModel):
     primitive_points: list
     order: int
     calculation_info: dict
+    not_elliptic: str
 
 class ExerciseResponse(BaseModel):
     a: int
@@ -105,30 +107,36 @@ class Plugin():
     # ECC_Untersucher but with proper maths i guess
     @router.post("/ecc/inspect", response_model=InspectResponse)
     def run(inspect_request: InspectRequest):
-        ecc = ECCInvestigator(inspect_request.a, inspect_request.b, inspect_request.p)
-        is_elliptic = ecc.is_curve_elliptic()
-        if is_elliptic:
-            order = ecc.get_order()
-            all_points = ecc.get_all_points_on_ec()
-            positive_points = ecc.get_positive_points_on_elliptic_curve()
-            primitives = ecc.get_primitive_points_on_elliptic_curve()
-            primitive_points = primitives[0]
-            calculation_info = primitives[1]
-            
-        else:
-            order = None
-            all_points = []
-            positive_points = []
-            primitive_points = []
-            calculation_info = {}
+        order = 0
+        all_points = []
+        positive_points = []
+        primitive_points = []
+        calculation_info = {}
+        is_elliptic = False
 
+        if isprime(inspect_request.p):
+            ecc = ECCInvestigator(inspect_request.a, inspect_request.b, inspect_request.p)
+            is_elliptic = ecc.is_curve_elliptic()
+            if is_elliptic:
+                order = ecc.get_order()
+                all_points = ecc.get_all_points_on_ec()
+                positive_points = ecc.get_positive_points_on_elliptic_curve()
+                primitives = ecc.get_primitive_points_on_elliptic_curve()
+                primitive_points = primitives[0]
+                calculation_info = primitives[1]
+                not_elliptic = "it is, trust"
+            else:
+                not_elliptic = "singular"
+        else:
+            not_elliptic = "nonprime"
         return {
             "is_elliptic": is_elliptic,
             "all_points": all_points,
             "positive_points": positive_points,
             "primitive_points": primitive_points,
             "order": order,
-            "calculation_info": calculation_info
+            "calculation_info": calculation_info,
+            "not_elliptic": not_elliptic
         }
     
     @router.get("/ecc/practice", response_model=ExerciseResponse)

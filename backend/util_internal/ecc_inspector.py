@@ -1,6 +1,6 @@
 import math
 from Crypto.Random import random
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 
 
 class ECCInvestigator:
@@ -15,7 +15,6 @@ class ECCInvestigator:
     def is_curve_elliptic(self) -> bool:
         return (4 * pow(self.a, 3) + 27 * pow(self.b, 2)) % self.p != 0
 
-    # extremely bruteforce way to do it, might be improvable
     def get_all_points_on_ec(self) -> List[Tuple[int, int]]:
         if not self.is_curve_elliptic():
             raise Exception("Curve must be elliptic")
@@ -44,48 +43,37 @@ class ECCInvestigator:
     def get_order(self) -> int:
         return len(self.get_positive_points_on_elliptic_curve()) + 1
 
-    def get_primitive_points_on_elliptic_curve(self) -> List[Tuple[int, int]]:
+    def get_primitive_points_on_elliptic_curve(self) -> Tuple[List[Tuple[int, int]], Dict[Tuple[int, int], List[Tuple[int, int]]]]:
         primitive_points = []
+        traversed_points_dict = {}
 
         positive_points = self.get_positive_points_on_elliptic_curve()
-        last_calculated_point = None
-
-        traversed_points_dict = {}
+        total_points_count = len(positive_points) + 1  # Including point at infinity
 
         for current_point in positive_points:
             traversed_points = [current_point]
+            last_calculated_point = current_point
 
-            for y in range(1, len(positive_points)):
-                try:
-                    if y == 1:
-                        last_calculated_point = self.double_point(current_point)
-                    else:
-                        last_calculated_point = self.add_two_points(current_point, last_calculated_point)
-                    traversed_points.append(last_calculated_point)
-                except ZeroDivisionError:
+            while True:
+                last_calculated_point = self.add_two_points(last_calculated_point, current_point)
+                if last_calculated_point == (None, None) or last_calculated_point in traversed_points:
                     break
+                traversed_points.append(last_calculated_point)
 
-            #print(f"For point ({current_point[0]} , {current_point[1]}), traversed points:")
             traversed_points_dict[current_point] = traversed_points[:]
-
-            # point_counter = 0
-            # for point in traversed_points:
-            #     point_counter += 1
-            #     print(f"Point {point_counter}: ({point[0]} , {point[1]})")
-            # print("\n")
-
-            if len(traversed_points) == len(positive_points):
+            if len(traversed_points)+1 == total_points_count:
                 primitive_points.append(current_point)
-
-                for positive_point in positive_points:
-                    for point in traversed_points:
-                        if positive_point == point:
-                            traversed_points.remove(point)
-                            break
-
-                if len(traversed_points) != 0:
-                    raise RuntimeError("Error in point iteration: new point found or point traversed multiple times")
         return primitive_points, traversed_points_dict
+
+    def get_order_of_point(self, point: Tuple[int, int]) -> int:
+        order = 1
+        current_point = point
+
+        while current_point != (None, None):
+            current_point = self.add_two_points(current_point, point)
+            order += 1
+
+        return order
 
     def double_point(self, point: Tuple[int, int]) -> Tuple[int, int]:
         if not self.is_curve_elliptic():
@@ -94,66 +82,47 @@ class ECCInvestigator:
         if point == (None, None):
             return (None, None)  # Point at infinity
 
+        if point[1] == 0:
+            return (None, None)  # Tangent is vertical, result is point at infinity
+
         numerator = 3 * pow(point[0], 2) + self.a
         denominator = 2 * point[1]
 
-        if denominator == 0:
-            return (None, None)
-
-        if denominator < 0:
-            denominator *= -1
-            numerator *= -1
-
         denominator = self.mod_inverse(denominator)
         if denominator is None:
-            raise RuntimeError("Modular inverse does not exist.")
+            return (None, None)
 
-        s = int(numerator * denominator) % self.p
+        s = (numerator * denominator) % self.p
 
-        x2 = (int(pow(s, 2)) - point[0] - point[0]) % self.p
-        while x2 < 0:
-            x2 += self.p
-
+        x2 = (pow(s, 2) - 2 * point[0]) % self.p
         y2 = (s * (point[0] - x2) - point[1]) % self.p
-        while y2 < 0:
-            y2 += self.p
 
         return (x2, y2)
 
     def add_two_points(self, point1: Tuple[int, int], point2: Tuple[int, int]) -> Tuple[int, int]:
         if not self.is_curve_elliptic():
-            raise RuntimeError("Curve mustbe elliptic")
+            raise RuntimeError("Curve must be elliptic")
 
         if point1 == (None, None):
             return point2
         if point2 == (None, None):
             return point1
+        if point1[0] == point2[0] and point1[1] != point2[1]:
+            return (None, None)  # Points are vertical, result is point at infinity
         if point1 == point2:
             return self.double_point(point1)
 
         numerator = point2[1] - point1[1]
         denominator = point2[0] - point1[0]
 
-        if denominator == 0:
-            return (None, None)
-
-        if denominator < 0:
-            denominator *= -1
-            numerator *= -1
-
         denominator = self.mod_inverse(denominator)
         if denominator is None:
-            raise RuntimeError("Modular inverse does not exist.")
+            return (None, None)
 
-        s = int(numerator * denominator) % self.p
+        s = (numerator * denominator) % self.p
 
-        x3 = (int(pow(s, 2)) - point1[0] - point2[0]) % self.p
-        while x3 < 0:
-            x3 += self.p
-
+        x3 = (pow(s, 2) - point1[0] - point2[0]) % self.p
         y3 = (s * (point1[0] - x3) - point1[1]) % self.p
-        while y3 < 0:
-            y3 += self.p
 
         return (x3, y3)
 
@@ -163,30 +132,27 @@ class ECCInvestigator:
 
         return pow(y, 2) % self.p == (pow(x, 3) + self.a * x + self.b) % self.p
 
-    # also very brutforce, is there no algorithm for this?
     def mod_inverse(self, value: int) -> int:
-        if self.p == 1 or self.p == 0:
-            return None
-
-        if value % self.p == 0:
-            raise ZeroDivisionError("Modular inverse does not exist if the value is a multiple of p")
-
-        if math.gcd(value, self.p) != 1:
-            raise ZeroDivisionError("p and the value are not coprime")
-
+        value = value % self.p
         if value < 0:
-            raise ZeroDivisionError("Value cannot be negative for modular inverse calculation")
+            value += self.p
 
-        for i in range(self.p):
-            if (value * i) % self.p == 1:
-                return i
+        g, x, _ = self.extended_gcd(value, self.p)
+        if g != 1:
+            raise ZeroDivisionError("Modular inverse does not exist if the value is a multiple of p")
+        return x % self.p
 
-        return None
-    
-    # added method to check if curve is cyclic
+    def extended_gcd(self, a: int, b: int) -> Tuple[int, int, int]:
+        if a == 0:
+            return b, 0, 1
+        gcd, x1, y1 = self.extended_gcd(b % a, a)
+        x = y1 - (b // a) * x1
+        y = x1
+        return gcd, x, y
+
     def is_curve_primitive(self) -> bool:
-        return len(self.get_primitive_points_on_elliptic_curve()) == self.get_order() - 1
-    
+        return len(self.get_primitive_points_on_elliptic_curve()[0]) == self.get_order() - 1
+
     def scalar_multiplication(self, scalar: int, point: Tuple[int, int]) -> Tuple[int, int]:
         if not self.is_curve_elliptic():
             raise RuntimeError("Curve must be elliptic")
@@ -242,8 +208,10 @@ def generate_private_key(order: int):
 
 def generate_base_point(a: int, b: int, p: int):
     ecc = ECCInvestigator(a, b, p)
-    points = ecc.get_primitive_points_on_elliptic_curve()[0]
-    return random.choice(points)
+    primitive_points, _ = ecc.get_primitive_points_on_elliptic_curve()
+    if not primitive_points:
+        raise ValueError("No primitive points found on the curve")
+    return random.choice(primitive_points)
 
 def generate_public_key(private_key: int, a: int, b: int, p: int, base_point: Tuple[int, int]):
     ecc = ECCInvestigator(a, b, p)

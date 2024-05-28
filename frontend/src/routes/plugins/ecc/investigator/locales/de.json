@@ -13,5 +13,7 @@
     "steplabel": "Schritt",
     "calculationdetails": "Berechnungsinfos",
     "details_one": "Mit Punkt",
-    "details_two": " durchlaufene Punkte"
+    "details_two": " durchlaufene Punkte",
+    "singular": "Kurve erfüllt die Nichtsingularitätsbedingung nicht.",
+    "nonprime": "P ist keine Primzahl."
 }

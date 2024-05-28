@@ -3,7 +3,6 @@ import { API_BASE_URL } from '$lib/config';
 export async function load({ }) {
     const apiResponse = await fetch(`${API_BASE_URL}/plugins/blockciphers/faults`);
     const response = await apiResponse.json();
-    console.log(response)
     return {
         status: 200,
         body: response

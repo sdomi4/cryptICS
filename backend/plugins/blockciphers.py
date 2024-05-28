@@ -51,7 +51,7 @@ class AvalancheResponse(BaseModel):
     hamming: int
 
 class FaultGetResponse(BaseModel):
-    cleartext: list[str]
+    cleartext: dict
     key: str
     iv: str
     nonce: str
@@ -209,11 +209,26 @@ class Plugin():
 
         return {
             "cleartext": {
-                "ECB": hex_to_blocks(decrypt_ecb, 128),
-                "CBC": hex_to_blocks(decrypt_cbc, 128),
-                "CTR": hex_to_blocks(decrypt_ctr, 128),
-                "OFB": hex_to_blocks(decrypt_ofb, 128),
-                "CFB": hex_to_blocks(decrypt_cfb, 128)
+                "ECB": {
+                    "hex": hex_to_blocks(decrypt_ecb, 128),
+                    "binary": binary_to_blocks(''.join(format(int(c, 16), '04b') for c in decrypt_ecb), 128)
+                },
+                "CBC": {
+                    "hex": hex_to_blocks(decrypt_cbc, 128),
+                    "binary": binary_to_blocks(''.join(format(int(c, 16), '04b') for c in decrypt_cbc), 128)
+                },
+                "CTR": {
+                    "hex": hex_to_blocks(decrypt_ctr, 128),
+                    "binary": binary_to_blocks(''.join(format(int(c, 16), '04b') for c in decrypt_ctr), 128)
+                },
+                "OFB": {
+                    "hex": hex_to_blocks(decrypt_ofb, 128),
+                    "binary": binary_to_blocks(''.join(format(int(c, 16), '04b') for c in decrypt_ofb), 128)
+                },
+                "CFB": {
+                    "hex": hex_to_blocks(decrypt_cfb, 128),
+                    "binary": binary_to_blocks(''.join(format(int(c, 16), '04b') for c in decrypt_cfb), 128)
+                }
             }
         }
 
@@ -233,7 +248,10 @@ class Plugin():
         cfb_response = aes_encrypt(random_input, "CFB", random_key, iv=iv)
 
         return {
-            "cleartext": hex_to_blocks(random_input.hex(), 128),
+            "cleartext": {
+                "hex": hex_to_blocks(random_input.hex(), 128),
+                "binary": binary_to_blocks(''.join(format(byte, '08b') for byte in random_input), 128)
+            },
             "key": random_key.hex(),
             "ciphertext": {
                 "ECB": hex_to_blocks(ecb_response["ciphertext"], 128),

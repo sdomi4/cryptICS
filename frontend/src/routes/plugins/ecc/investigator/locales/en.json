@@ -13,5 +13,7 @@
     "steplabel": "Step",
     "calculationdetails": "Calculation Details",
     "details_one": "With point",
-    "details_two": ", traversed these points"
+    "details_two": ", traversed these points",
+    "singular": "The curve does not satisfy the non-singularity condition.",
+    "nonprime": "P is not prime."
 }

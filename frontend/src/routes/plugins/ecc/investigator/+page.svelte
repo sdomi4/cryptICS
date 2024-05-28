@@ -54,6 +54,19 @@
     $: curveOrder = 0;
     $: calculationdetails = {};
     $: detailsArray = [];
+    $: notElliptic = "";
+    $: ellipticReason = "";
+
+    $: {
+        if (!isElliptic) {
+            if (notElliptic === "singular") {
+                ellipticReason = translation.singular;
+            }
+            if (notElliptic === "nonprime") {
+                ellipticReason = translation.nonprime;
+            }
+        }
+    }
     
     let curveLoaded = false;
 
@@ -75,6 +88,7 @@
         })
 
         const curve = await response.json();
+        console.log(curve);
         isElliptic = curve.is_elliptic;
         isCyclic = curve.is_cyclic;
         allPoints = curve.all_points;
@@ -82,6 +96,7 @@
         allPrimitivePoints = curve.primitive_points;
         curveOrder = curve.order;
         calculationdetails = curve.calculation_info;
+        notElliptic = curve.not_elliptic;
         // clear array first duh
         detailsArray = [];
         for (let key in calculationdetails) {
@@ -135,7 +150,6 @@
 
     function handleTabChange(event) {
         activeTab = event.detail.tabValue;
-        console.log(activeTab);
     }
   </script>
 
@@ -172,6 +186,9 @@
             <div class="curveinfo">
                 <div class="elliptic">
                     {@html isElliptic ? translation.elliptic_true : translation.elliptic_false}
+                    {#if !isElliptic}
+                        {ellipticReason}
+                    {/if}
                 </div>
                 {#if isElliptic}
                 <div class="order">
