@@ -7,5 +7,7 @@
     "diffconfintro": "Anhand von 32 Byte zufälligen Daten (sprich 2 Blöcke in AES) wird der Lawineneffekt demonstriert. Im Klartext und im Schlüssel können einzelne Bits per Klick geändert werden, und die Änderungen werden im Chiffrat gezeigt. Als Chiffre wird AES-ECB verwender, entsprechend sind die Folgen von Änderungen im Klartext auf den betroffenen Block beschränkt.",
     "keyintro": "Der Schlüssel K ist zufällig generiert:",
     "hamming1": "Die Änderung hat im Chiffrat",
-    "hamming2": "Bits geändert."
+    "hamming2": "Bits geändert",
+    "hamming3": "von einem Block",
+    "hamming4": "vom Chiffrat"
 }

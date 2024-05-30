@@ -49,7 +49,14 @@
         display: inline-block;
     }
 
-    .supsub sup,
+    .supsub sup {
+        position: relative;
+        display: block;
+        font-size: 0.8em;
+        line-height: 1.2;
+        top: 6px;
+    }
+
     .supsub sub {
         position: relative;
         display: block;
@@ -79,6 +86,11 @@
     .tablestyle input[type="number"] {
         width: 100%;
         box-sizing: border-box;
+    }
+
+    .groupthing {
+        font-size: 1.2em;
+    
     }
 </style>
 <script>
@@ -254,6 +266,19 @@
         }
     }
 
+    let openFields = [];
+    elements.forEach((_, i) => {
+        elements.forEach((_, j) => {
+            if (Math.random() < 0.15) {  // value controls how many fields are left to fill randomly
+                openFields.push([i, j]);
+            }
+        });
+    });
+
+    function isFieldOpen(i, j) {
+        return openFields.some(([x, y]) => x === i && y === j);
+    }
+
 </script>
 
 <head>
@@ -269,11 +294,12 @@
             
 
             <!-- group info -->
-            <p>{translation.given} &#8484;<span class="supsub"><sup>{operationSymbol(operation)}</sup><sub>{mod}</sub></span></p>
+            <p>{translation.given} <span class="groupthing">(&#8484;<span class="supsub"><sup>{operationSymbol(operation)}</sup><sub>{mod}</sub></span>, &#10752;<sub>{mod}</sub>)</span></p>
 
             <!-- order stuff -->
             {#if $stepDetails.showOrder}
                 <p>{translation.order} <input type="number" on:input={(event) => checkSingleInput(event, "order")}></p>
+                <p>{translation.orderextra}</p>
             {/if}
             <!-- subgroup things -->
             {#if $stepDetails.showSubgroups}
@@ -307,11 +333,15 @@
                         <th>{rowElement}</th>
                         {#each elements as colElement, j}
                             <td>
+                                {#if isFieldOpen(i, j)}
                                 <input type="number"
                                     aria-label={`${rowElement} ${operationSymbol(operation)} ${colElement}`}
                                     on:input={(event) => checkInput(event, rowElement, colElement)}
                                     min="0"
-                                    max={data.props.data.mod}>
+                                    max={mod}>
+                                {:else}
+                                    {data.props.data.exponenttable[rowElement][colElement]}
+                                {/if}
                             </td>
                         {/each}
                     </tr>

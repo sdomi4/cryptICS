@@ -8,5 +8,7 @@
     "diffconfintro": "32 bytes of random data (equivalent to 2 blocks in AES) are used to demonstrate the avalanche effect. You can click on bits in either the key or plaintext to flip them, and the ciphertext will show the resulting changes. The cipher used is AES-ECB, so changes to the plaintext are contained within the affected block.",
     "keyintro": "The key K is randomly generated:",
     "hamming1": "The modification changed",
-    "hamming2": "bits in the ciphertext."
+    "hamming2": "bits in the ciphertext",
+    "hamming3": "of a block",
+    "hamming4": "of the ciphertext"
 }

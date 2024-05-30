@@ -117,7 +117,7 @@
             </div>
             <div class="analysis">
                 {#if hamming != 0}
-                    {translation.hamming1} {hamming} {translation.hamming2}
+                {translation.hamming1} {hamming} {translation.hamming2} ({(hamming/128*100).toFixed(2)}% {translation.hamming3}, {(hamming/256*100).toFixed(2)}% {translation.hamming4}).
                 {/if}
             </div>
         </div>
@@ -129,14 +129,14 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
-        align-items: center;
+        align-items: flex-start;
         margin-top: 60px;
     }
 
     .visualisation {
         display: flex;
         flex-direction: row;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: center;
     }
 
@@ -146,5 +146,9 @@
 
     .key {
         margin-right: 50px;
+    }
+
+    .analysis {
+        width: 35ch;
     }
 </style>

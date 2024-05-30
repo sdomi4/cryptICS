@@ -31,6 +31,7 @@ class InspectResponse(BaseModel):
     order: int
     calculation_info: dict
     not_elliptic: str
+    infinity: int
 
 class ExerciseResponse(BaseModel):
     a: int
@@ -113,6 +114,7 @@ class Plugin():
         primitive_points = []
         calculation_info = {}
         is_elliptic = False
+        infinity = 0
 
         if isprime(inspect_request.p):
             ecc = ECCInvestigator(inspect_request.a, inspect_request.b, inspect_request.p)
@@ -125,6 +127,7 @@ class Plugin():
                 primitive_points = primitives[0]
                 calculation_info = primitives[1]
                 not_elliptic = "it is, trust"
+                infinity = ecc.get_x_at_infinity(positive_points[0])
             else:
                 not_elliptic = "singular"
         else:
@@ -136,7 +139,8 @@ class Plugin():
             "primitive_points": primitive_points,
             "order": order,
             "calculation_info": calculation_info,
-            "not_elliptic": not_elliptic
+            "not_elliptic": not_elliptic,
+            "infinity": infinity
         }
     
     @router.get("/ecc/practice", response_model=ExerciseResponse)

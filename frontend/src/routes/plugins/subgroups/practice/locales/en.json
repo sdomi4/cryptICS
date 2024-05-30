@@ -4,12 +4,13 @@
     "next": "Next Step",
     "given": "Given is the group",
     "order": "Therefore, the group has order",
-    "subgroups": "Accordingly, the group can contain",
+    "orderextra": "If the order is prime, the group is cyclic, and all elements except the neutral element are primitive. In that case, the group only has the 2 trivial subgroups.",
+    "subgroups": "Accordingly, the group can contain up to",
     "subgroups2": "subgroups with these orders (comma-separated, e.g. '1, 3, 6, 9)'",
     "primitives": "With order",
     "primitives2": ", the group has φ(",
     "primitives3": ") =",
-    "primitives4": "primitive (generating) elements (this is only guaranteed if the order is prime).",
-    "table": "From the elements, the exponent table can be calculated:",
-    "coloring": "Subgroups and their respective orders can be identified visually by highlighting repeating elements by clicking:"
+    "primitives4": "primitive (generating) if the group is cyclic, which is only guaranteed if the order is prime. If the group is not cyclic, the order of subgroups and elements will still be divisors of the group order.",
+    "table": "From the elements, the exponent table can be calculated (fill the blanks):",
+    "coloring": "Subgroups and their respective orders can be identified visually by highlighting unique elements per row by clicking. If the group is cyclic, φ(order) rows will be fully colored."
 }

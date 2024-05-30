@@ -43,15 +43,9 @@
         </div>
       </div>
       <div class="sectioncontainer">
-        {translation.blindsignature}
-        <div class="sectionlink">
-          <a href='/plugins/rsa/blindsignature'>{translation.blindtitle}</a>  
-        </div>
-      </div>
-      <div class="sectioncontainer">
         {translation.carmichael}
         <div class="sectionlink">
-          <a href='/plugins/rsa/blindsignature'>{translation.carmichael}</a>  
+          <a href='/plugins/rsa/carmichael'>{translation.carmichaeltitle}</a>  
         </div>
       </div>
     </div>

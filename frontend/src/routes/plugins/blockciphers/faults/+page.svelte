@@ -147,7 +147,7 @@
                             <input type="checkbox" on:change={() => toggleBinaryView('ECB')}>
                             <span class="slider">
                                 {#if showBinary.ECB}
-                                    <span class="text text-right">Binary</span>
+                                    <span class="text text-right">{translation.binary}</span>
                                 {:else}
                                     <span class="text text-left">Hex</span>
                                 {/if}
@@ -165,7 +165,7 @@
                             <input type="checkbox" on:change={() => toggleBinaryView('CBC')}>
                             <span class="slider">
                                 {#if showBinary.CBC}
-                                    <span class="text text-right">Binary</span>
+                                    <span class="text text-right">{translation.binary}</span>
                                 {:else}
                                     <span class="text text-left">Hex</span>
                                 {/if}
@@ -183,7 +183,7 @@
                             <input type="checkbox" on:change={() => toggleBinaryView('OFB')}>
                             <span class="slider">
                                 {#if showBinary.OFB}
-                                    <span class="text text-right">Binary</span>
+                                    <span class="text text-right">{translation.binary}</span>
                                 {:else}
                                     <span class="text text-left">Hex</span>
                                 {/if}
@@ -201,7 +201,7 @@
                             <input type="checkbox" on:change={() => toggleBinaryView('CFB')}>
                             <span class="slider">
                                 {#if showBinary.CFB}
-                                    <span class="text text-left">Binary</span>
+                                    <span class="text text-left">{translation.binary}</span>
                                 {:else}
                                     <span class="text text-right">Hex</span>
                                 {/if}
@@ -219,7 +219,7 @@
                             <input type="checkbox" on:change={() => toggleBinaryView('CTR')}>
                             <span class="slider">
                                 {#if showBinary.CTR}
-                                    <span class="text text-left">Binary</span>
+                                    <span class="text text-left">{translation.binary}</span>
                                 {:else}
                                     <span class="text text-right">Hex</span>
                                 {/if}

@@ -172,6 +172,17 @@ class ECCInvestigator:
             scalar >>= 1
         return result
     
+    def get_x_at_infinity(self, starting_point: Tuple[int, int]) -> int:
+        order = self.get_order_of_point(starting_point)
+    
+        current_point = starting_point
+        for i in range(1, order + 1):
+            current_point = self.add_two_points(current_point, starting_point)
+            if current_point == (None, None):
+                return starting_point[0]
+    
+        raise ValueError("This infinity was very short (didn't reach infinity)")
+    
 # random curve generator
 def random_curve():
     primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]

@@ -2,10 +2,15 @@
 import { API_BASE_URL } from '$lib/config';
 export async function load({ fetch }) {
   // static data for now, dynamically generate random groups later
+  const primes = [5, 7, 11, 13, 17];
+  const randomIndex = Math.floor(Math.random() * primes.length);
+  const selectedPrime = primes[randomIndex];
+  const elementsArray = Array.from({ length: selectedPrime - 1 }, (_, i) => i + 1);
+
   const groupData = {
-    elements: [1, 2, 3, 4, 5, 6],
+    elements: elementsArray,
     operation: "mul",
-    mod: 7
+    mod: selectedPrime
   };
 
   const apiResponse = await fetch(`${API_BASE_URL}/plugins/groups/subgroups`, {

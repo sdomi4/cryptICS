@@ -56,6 +56,7 @@
     $: detailsArray = [];
     $: notElliptic = "";
     $: ellipticReason = "";
+    $: infinityX = 0;
 
     $: {
         if (!isElliptic) {
@@ -97,6 +98,7 @@
         curveOrder = curve.order;
         calculationdetails = curve.calculation_info;
         notElliptic = curve.not_elliptic;
+        infinityX = curve.infinity;
         // clear array first duh
         detailsArray = [];
         for (let key in calculationdetails) {
@@ -134,17 +136,17 @@
     { label: translation.allpoints,
 		 value: 1,
 		 component: Points,
-         props: {points: allPoints, translation: translation}
+         props: {points: allPoints, infinity: infinityX, translation: translation}
 		},
     { label: translation.positivepoints,
 		 value: 2,
 		 component: Points,
-         props: {points: allPositivePoints, translation: translation}
+         props: {points: allPositivePoints, infinity: infinityX, translation: translation}
 		},
     { label: translation.primitivepoints,
 		 value: 3,
 		 component: Points,
-         props: {points: allPrimitivePoints, translation: translation}
+         props: {points: allPrimitivePoints, infinity: infinityX, translation: translation}
 		}
   ];
 

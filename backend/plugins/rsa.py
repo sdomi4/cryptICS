@@ -8,6 +8,8 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
 from backend.util_internal.rsa import rsa_encrypt_unpadded, rsa_decrypt_unpadded, get_key
+from backend.util_internal.carmichael import carmichael as carmichael_lambda
+from backend.util_internal.euler_phi import euler_phi
 
 class UnpaddedEncryptRequest(BaseModel):
     data: int
@@ -18,6 +20,15 @@ class UnpaddedDecryptRequest(BaseModel):
 class HomomorphicRequest(BaseModel):
     initial_data: int = None
     modifier: int = None
+
+class CarmichaelRequest(BaseModel):
+    n: int
+
+class CarmichaelResponse(BaseModel):
+    n: int
+    carmichael: int
+    carmichael_steps: dict
+    euler_phi: int
 
 class UnpaddedDecryptResponse(BaseModel):
     decrypted_data: int
@@ -141,4 +152,15 @@ class Plugin():
                 "p": p,
                 "q": q
             }
+        }
+    
+    @router.post("/rsa/carmichael", response_model=CarmichaelResponse)
+    def run(carmichael_request: CarmichaelRequest):
+        carmichael = carmichael_lambda(carmichael_request.n)
+        euler = euler_phi(carmichael_request.n)
+        return {
+            "n": carmichael_request.n,
+            "carmichael": carmichael["result"],
+            "carmichael_steps": carmichael["steps"],
+            "euler_phi": euler,
         }
