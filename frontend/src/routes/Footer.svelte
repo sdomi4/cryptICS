@@ -4,7 +4,7 @@
 
 <footer>
     <div class="made">
-        Made by Dominik Schenker, supported by Josef Schuler & Ron Porath, SecProj HS23
+        Made by Dominik Schenker, supported by Josef Schuler & Ron Porath, SecProj HS23 / WIPRO FS24
     </div>
     <div class="footercontainer">
         <a href="https://hslu.ch">Docs</a>
