@@ -1,4 +1,5 @@
 {
     "pagetitle": "Gruppentheorie",
-    "subgrouptitle": "Berechnen"
+    "subgrouptitle": "Berechnen",
+    "invalidgroup": "Die eingegebene Gruppe ist ungültig."
 }

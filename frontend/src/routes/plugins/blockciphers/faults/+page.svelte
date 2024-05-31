@@ -49,8 +49,8 @@
     let showBinary = {
         ECB: false,
         CBC: false,
-        OFB: false,
-        CFB: true, // Default to binary
+        OFB: true, // Default to binary
+        CFB: false,
         CTR: true  // Default to binary
     };
 
@@ -123,7 +123,6 @@
 <body>
     <div class="bodycontainer">
         <div class="introcontainer">
-            <h1>{translation.faulttitle}</h1>
             <p>{translation.faultdescription}</p>
         </div>
         <div class="visualisationcontainer">
@@ -183,9 +182,9 @@
                             <input type="checkbox" on:change={() => toggleBinaryView('OFB')}>
                             <span class="slider">
                                 {#if showBinary.OFB}
-                                    <span class="text text-right">{translation.binary}</span>
+                                    <span class="text text-left">{translation.binary}</span>
                                 {:else}
-                                    <span class="text text-left">Hex</span>
+                                    <span class="text text-right">Hex</span>
                                 {/if}
                             </span>
                         </label>
@@ -201,9 +200,9 @@
                             <input type="checkbox" on:change={() => toggleBinaryView('CFB')}>
                             <span class="slider">
                                 {#if showBinary.CFB}
-                                    <span class="text text-left">{translation.binary}</span>
+                                    <span class="text text-right">{translation.binary}</span>
                                 {:else}
-                                    <span class="text text-right">Hex</span>
+                                    <span class="text text-left">Hex</span>
                                 {/if}
                             </span>
                         </label>
@@ -236,6 +235,9 @@
 </body>
 
 <style>
+    .bodycontainer {
+        margin-top: 80px;
+    }
     .cleartextcontainer {
         display: flex;
         flex-direction: row;

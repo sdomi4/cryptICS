@@ -19,6 +19,15 @@
     export let form;
     let subgroups = form?.body.subgroups || []
     subgroups.sort(Object.keys);
+
+    $: is_group = true;
+    $: {
+      if (subgroups.is_group === false) {
+        is_group = false;
+      } else {
+        is_group = true;
+      }
+    } 
 </script>
 
 <style>
@@ -121,6 +130,9 @@
     <button type="submit">Submit</button>
   </form>
     <div class="subgroupcontainer">
+    {#if !is_group}
+      <p>{translation.invalidgroup}</p>
+    {/if}
     {#each subgroups as subgroup}
       {@const order = Object.keys(subgroup)}
       {@const elements = Object.keys(subgroup[order])}

@@ -35,16 +35,9 @@ def carmichael(n: int) -> Dict[str, List[Tuple[str, int]]]:
             factors.append(i)
     if n > 1:
         factors.append(n)
-    
-    # Get unique prime factors
-    unique_factors = list(set(factors))
-    
-    # Step results
-    steps = {}
 
-    # # Add prime factorization to steps
-    # factorization = " * ".join([str(f) for f in factors])
-    # steps.append((f"Prime factorization of {original_n}", factorization))
+    unique_factors = list(set(factors)) 
+    steps = {}
     steps["factorization"] = factors
 
     # Calculate lambda(p^e) for each unique prime factor
@@ -58,8 +51,7 @@ def carmichael(n: int) -> Dict[str, List[Tuple[str, int]]]:
             lambda_pe = 2 ** (exp - 1)
         else:
             lambda_pe = (p - 1) * (p ** (exp - 1))
-        
-        #steps.append((f"λ({p}^{exp})", lambda_pe))
+
         steps["lambdas"].append((f"λ({p}^{exp})", lambda_pe))
         lambdas.append(lambda_pe)
     
@@ -72,13 +64,3 @@ def carmichael(n: int) -> Dict[str, List[Tuple[str, int]]]:
         "steps": steps,
         "result": lambda_n
     }
-
-# Example Usage
-def main():
-    n = 60  # Example number
-    result = carmichael(n)
-    print(f"Carmichael function steps for λ({n}):")
-    for step, value in result["steps"]:
-        print(f"{step} = {value}")
-    print(f"Final result: λ({result['number']}) = {result['result']}")
-
