@@ -1,6 +1,5 @@
 <script>
     export let binaryblocks = '';
-    console.log(binaryblocks);
 </script>
 
 <div class="blockviewer">

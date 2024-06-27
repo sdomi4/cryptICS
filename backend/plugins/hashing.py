@@ -66,7 +66,6 @@ class Plugin():
     # method called during plugin discovery to register API endpoints
     # return None if no endpoints should be registered
     def register(self):
-        return None
         return self.router
     
 
@@ -84,28 +83,3 @@ class Plugin():
     def algorithms():
         hashing_algorithms = ["BLAKE2b", "BLAKE2s", "CMAC", "cSHAKE128", "cSHAKE256", "HMAC", "KangarooTwelve", "keccak", "KMAC128", "KMAC256", "MD2", "MD4", "MD5", "Poly1305", "RIPEMD160", "SHA", "SHA1", "SHA224", "SHA256", "SHA384", "SHA3_224", "SHA3_256", "SHA3_384", "SHA3_512", "SHA512", "SHAKE128", "SHAKE256", "TupleHash128", "TupleHash256"]
         return {"algorithms": hashing_algorithms}
-
-    @router.post("/hash/diffusion", response_model=DiffusionResponse)
-    def diffusion(diffusion_request: DiffusionRequest):
-        algorithm = diffusion_request.algorithm.lower()
-        data = diffusion_request.data
-        print(diffusion_request)
-        h = create_hash(algorithm=algorithm, data=data)
-        if h is None:
-            raise HTTPException(status_code=404, detail="No such algorithm")
-        
-        index = random.randint(0, len(data) - 1)
-        flipped_data = data[:index] + chr(ord(data[index]) ^ 1) + data[index+1:]
-
-        h_modified = create_hash(algorithm=algorithm, data=flipped_data)
-        if h_modified is None:
-            raise HTTPException(status_code=404, detail="No such algorithm")
-
-        return {
-            "input": data,
-            "hash": h,
-            "hash_binary": hex_to_binary(h),
-            "modified_hash": h_modified,
-            "modified_hash_binary": hex_to_binary(h_modified)
-        }
-

@@ -94,8 +94,7 @@
 <body>
     <div class="bodycontainer">
         <div class="textcontainer">
-            <p>{translation.diffconfintro}</p>
-            
+            <p>{translation.diffconfintro}</p> 
         </div>
         <div class="visualisation">
             <div class="key">

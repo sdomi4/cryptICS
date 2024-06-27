@@ -13,8 +13,7 @@
     $: {
         translation = $language === 'en' ? en : de;
         navLinks.set([
-            { description: translation.diffusiontitle, uri: "/plugins/hashing/diffusion" },
-            { description: translation.experimenttitle, uri: "/plugins/hashing/experiment"}
+            { description: translation.diffusiontitle, uri: "/plugins/hashing/diffusion" }
         ]);
     }
   
@@ -33,15 +32,9 @@
     </div>
     <div class="sections">
     <div class="sectioncontainer">
-      {translation.diffusion}
+      {translation.avalanche}
       <div class="sectionlink">
-        <a href='/plugins/hashing/diffusion'>{translation.diffusiontitle}</a>  
-      </div>
-    </div>
-    <div class="sectioncontainer">
-      {translation.experiment}
-      <div class="sectionlink">
-        <a href='/plugins/hashing/experiment'>{translation.experimenttitle}</a>  
+        <a href='/plugins/hashing/avalanche'>{translation.avalanchetitle}</a>  
       </div>
     </div>
   </div>

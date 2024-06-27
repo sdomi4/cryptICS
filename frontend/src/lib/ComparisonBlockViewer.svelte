@@ -5,6 +5,7 @@
     export let modified = [];
 
     function highlighter(original, modified) {
+        if (original.length == 0 || modified.length == 0) return [];
         let highlightedArray = [];
 
         for (let i = 0; i < original.length; i++) {
