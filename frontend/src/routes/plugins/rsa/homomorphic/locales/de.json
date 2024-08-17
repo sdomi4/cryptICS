@@ -9,8 +9,11 @@
         "Um das Prinzip der multiplikativen Homomorphen Eigenschaft von RSA zu zeigen wird ein etwas unsinniges Szenario konstruiert. Um ohne das Szenario zu experimentieren, einfach dieses Feld ausblenden.<br><br><b>Szenario:</b><br>Der Besitzer einer Firma möchte den Lohn seiner Mitarbeitenden vervielfachen. Allerdings will er weder dass jemand anderes alle Löhne sehen kann, noch will er die Anpassung selbst erledigen.<br><br>Der Ausgangswert (im Szenario der Stundenlohn) kann angepasst werden.",
         "Damit niemand sehen kann, wie hoch der Lohn ist, verschlüsselt der Besitzer den Lohn mit seinem öffentlichen Schlüssel.<br><br><b>Zusatzinfos:</b><br>Die multiplikative homomorphe Eigentschaft von RSA ist nur in der Schulbuchvariante ohne Padding gegeben; diese ist aber unsicher. In der Darstellung wird das Chiffrat als Hex codiert und nur abgeschnitten angezeigt, da sie zu gross ist, um sie vollständig anzuzeigen. In der Darstellung wird, um Ressourcen zu schonen ein fixer 2048-bit RSA-Schlüssel verwendet.",
         "Der Besitzer legt fest, um welchen Faktor der Lohn erhöht werden soll. Der Faktor kann ebenfals angepasst werden.<br><br><b>Zusatzinfos:</b><br>Wenn der Faktor zu gross wird, kann es zu einem Überlauf vom Chiffrat kommen, wenn der als Teil vom RSA-Schlüssel gewählte Modulus kleiner als das Resultat ist. Im Rahmen des Szenarios sollte das nicht auftreten, der Modulus ist 617-stellig.",
-        "Der Besitzer verschlüsselt den gewählten Faktir ebenfalls mit seinem öffentlichen Schlüssel, so kann auch dieser nicht eingesehen werden.",
+        "Der Besitzer verschlüsselt den gewählten Faktor ebenfalls mit seinem öffentlichen Schlüssel, so kann auch dieser nicht eingesehen werden.",
         "Nun kann das Personal die Lohnerhöhung berechnen, indem es das Chiffrat des Lohns und des Faktors multipliziert, ohne den effektiven Lohn oder Faktor zu kennen.",
         "Der Besitzer kann das Resultat der Berechnung mit seinem privaten Schlüssel entschlüsseln und erhält den vervielfachen Lohn, ohne dass jemand anderes die Ursprungszahlen kennen musss, und ohne die Rechnung selbst durchzuführen."
-    ]
+    ],
+    "key": "RSA-Schlüssel",
+    "dummy": "Kleiner Schlüssel",
+    "real": "Echter Schlüssel"
 }

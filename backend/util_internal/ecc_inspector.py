@@ -74,6 +74,16 @@ class ECCInvestigator:
             order += 1
 
         return order
+    
+    def count_points_by_order(self) -> Dict[int, int]:
+        order_count = {}
+        for point in self.get_all_points_on_ec():
+            order = self.get_order_of_point(point)
+            if order in order_count:
+                order_count[order] += 1
+            else:
+                order_count[order] = 1
+        return order_count
 
     def double_point(self, point: Tuple[int, int]) -> Tuple[int, int]:
         if not self.is_curve_elliptic():
@@ -111,9 +121,8 @@ class ECCInvestigator:
             return (None, None)  # Points are vertical, result is point at infinity
         if point1 == point2:
             return self.double_point(point1)
-
-        numerator = point2[1] - point1[1]
-        denominator = point2[0] - point1[0]
+        numerator = (point2[1] - point1[1]) % self.p
+        denominator = (point2[0] - point1[0]) % self.p
 
         denominator = self.mod_inverse(denominator)
         if denominator is None:
@@ -188,8 +197,8 @@ def random_curve():
     primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]
     sanitycounter = 0
     while sanitycounter < 1000:
-        a = random.randint(-30, 30)
-        b = random.randint(-30, 30)
+        a = random.randint(0, 30)
+        b = random.randint(0, 30)
         p = random.choice(primes)
 
         ecc = ECCInvestigator(a, b, p)
@@ -203,8 +212,8 @@ def random_cyclic_curve():
     primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]
     sanitycounter = 0
     while sanitycounter < 1000:
-        a = random.randint(-30, 30)
-        b = random.randint(-30, 30)
+        a = random.randint(0, 30)
+        b = random.randint(0, 30)
         p = random.choice(primes)
 
         ecc = ECCInvestigator(a, b, p)

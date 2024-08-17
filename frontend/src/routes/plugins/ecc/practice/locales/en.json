@@ -5,7 +5,7 @@
     "given2": "x + ",
     "given3": "over",
     "curvecheck": "Check if the curve E is an elliptic curve.",
-    "curvecheckresult": "Result of the non-singularity test:",
+    "curvecheckresult": "Result of inserting curve parameters to the non-singularity test",
     "pointcheck": "Check if point P",
     "pointcheck2": "is on the curve E.",
     "pointcheckresult": "Result of inserting point P to the curve equation",

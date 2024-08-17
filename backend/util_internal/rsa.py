@@ -28,3 +28,18 @@ def get_key():
         'p': p,
         'q': q
     }
+
+def get_small_key():
+    n = 551
+    e = 43
+    d = 211
+    p = 19
+    q = 29
+
+    return {
+        'n': n,
+        'e': e,
+        'd': d,
+        'p': p,
+        'q': q
+    }

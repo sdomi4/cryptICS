@@ -12,5 +12,8 @@
         "The owner also encrypts the chosen factor with their public key, so it cannot be seen either.",
         "Now the staff can calculate the salary increase by multiplying the ciphertext of the salary and the factor without knowing the actual salary or factor.",
         "The owner can decrypt the result of the calculation and obtain the multiplied salary, without anyone else needing to know the original numbers, and without having to perform the calculation themselves."
-    ]
+    ],
+    "key": "RSA key",
+    "dummy": "Small key",
+    "real": "Real key"
 }

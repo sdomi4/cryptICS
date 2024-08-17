@@ -8,5 +8,7 @@
     {#each points as point, index}
         {translation.pointlabel} {index+1}: ({point[0]}, {point[1]})<br>
     {/each}
-    {translation.pointlabel} &#120134;: ({infinity}, &infin;)
+    {#if infinity != null}
+        {translation.pointlabel} &#120134;: (-, &infin;)
+    {/if}
 </body>

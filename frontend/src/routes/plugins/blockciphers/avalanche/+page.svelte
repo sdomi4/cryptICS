@@ -117,7 +117,7 @@
             </div>
             <div class="analysis">
                 {#if hamming != 0}
-                {translation.hamming1} {hamming} {translation.hamming2} ({(hamming/128*100).toFixed(2)}% {translation.hamming3}, {(hamming/256*100).toFixed(2)}% {translation.hamming4}).
+                {translation.hamming1} {hamming} {translation.hamming2}, {(hamming/256*100).toFixed(2)}% {translation.hamming4}.
                 {/if}
             </div>
         </div>

@@ -3,8 +3,8 @@
     "subpagetitle": "Elliptische Kurve untersuchen",
     "formula": "Untersuchung der Elliptischen Kurve E über ",
     "random": "Zufällige Kurve",
-    "elliptic_true": "Die Kurve <span style='color: green; font-weight: bold;'>E ist elliptisch.</span>",
-    "elliptic_false": "Die Kurve <span style='color: red; font-weight: bold;'>E ist nicht elliptisch.</span>",
+    "elliptic_true": "Die Kurve <span style='color: green; font-weight: bold;'>E ist elliptisch</span>",
+    "elliptic_false": "Die Kurve <span style='color: red; font-weight: bold;'>E ist nicht elliptisch</span>",
     "order": "Ordnung",
     "allpoints": "Alle Punkte",
     "positivepoints": "Positive Punkte",
@@ -15,5 +15,8 @@
     "details_one": "Mit Punkt",
     "details_two": " durchlaufene Punkte",
     "singular": "Kurve erfüllt die Nichtsingularitätsbedingung nicht.",
-    "nonprime": "P ist keine Primzahl."
+    "nonprime": "P ist keine Primzahl.",
+    "cyclic_true": "und ist zyklisch.",
+    "cyclic_false": "und ist nicht zyklisch.",
+    "allprimitivepoints": "Anzahl primitiver Punkte"
 }

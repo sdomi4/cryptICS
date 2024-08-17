@@ -6,6 +6,6 @@
     "ciphertext": "Ciphertext(*):",
     "decrypted": "Decrypted:",
     "faultdescription": "Below is a randomly generated ciphertext(*), each block representing 128 bits. Click on any portion to introduce errors. Below, you can see how the error propagates through decryption with different block cipher modes.",
-    "faultdetails": "(*) In the background, 5 different ciphertexts, one per mode, are calculated and decrypted, the visible ciphertext is created using AES128-CBC and acts as a stand-in. Clicking a hex number will always flip the last bit of the 4 bits it represents in each ciphertext.",
+    "faultdetails": "(*) In the background, the same cleartext is encrypted and decrypted with each mode, the visible ciphertext is created using AES128-CBC and acts as a stand-in. Clicking a hex number will always flip the last bit of the 4 bits it represents in each ciphertext.",
     "binary": "Binary"
 }

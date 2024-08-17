@@ -7,7 +7,7 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
-from backend.util_internal.rsa import rsa_encrypt_unpadded, rsa_decrypt_unpadded, get_key
+from backend.util_internal.rsa import rsa_encrypt_unpadded, rsa_decrypt_unpadded, get_key, get_small_key
 from backend.util_internal.carmichael import carmichael as carmichael_lambda
 from backend.util_internal.euler_phi import euler_phi
 
@@ -20,6 +20,7 @@ class UnpaddedDecryptRequest(BaseModel):
 class HomomorphicRequest(BaseModel):
     initial_data: int = None
     modifier: int = None
+    real_key: bool = False
 
 class CarmichaelRequest(BaseModel):
     n: int
@@ -115,7 +116,11 @@ class Plugin():
     
     @router.post("/rsa/homomorphic", response_model=HomomorphicResponse)
     def run(homomorphic_request: HomomorphicRequest):
-        key = get_key()
+        if homomorphic_request.real_key:
+            key = get_key()
+        else:
+            key = get_small_key()
+
         n = key['n']
         e = key['e']
         d = key['d']
@@ -138,12 +143,17 @@ class Plugin():
 
         decrypted_data = rsa_decrypt_unpadded(homomorphic_data, n, d)
 
+        if homomorphic_request.real_key:
+            encrypted_data = hex(encrypted_data)
+            modified_data = hex(modified_data)
+            homomorphic_data = hex(homomorphic_data)
+
         return {
             "initial_data": initial_data,
-            "encrypted_data": hex(encrypted_data),
+            "encrypted_data": str(encrypted_data),
             "modifier": modifier,
-            "modified_data": hex(modified_data),
-            "homomorphic_data": hex(homomorphic_data),
+            "modified_data": str(modified_data),
+            "homomorphic_data": str(homomorphic_data),
             "decrypted_data": decrypted_data,
             "key": {
                 "n": hex(n),

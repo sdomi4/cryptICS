@@ -50,7 +50,7 @@ def generate_practice_points(a: int, b: int, p: int):
 
 def check_nonsingularity(a: int, b: int, p: int):
     # return result instead of boolean
-    return 4 * pow(a, 3) + 27 * pow(b, 2) % p
+    return (4 * pow(a, 3) + 27 * pow(b, 2)) % p
 
 def check_point_on_curve(x: int, y: int, a: int, b: int, p: int):
     # return results of both sides of equation to check inputs

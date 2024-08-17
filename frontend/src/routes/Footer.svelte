@@ -7,11 +7,9 @@
         Made by Dominik Schenker, supported by Josef Schuler & Ron Porath, SecProj HS23 / WIPRO FS24
     </div>
     <div class="footercontainer">
-        <a href="https://hslu.ch">Docs</a>
         <div class ="github">
             <a href="https://github.com/sdomi4"><img src={github} alt="GitHub Link" width=25px height=25px></a>
         </div>
-        <a href="mailto:dominik.schenker@stud.hslu.ch">Email</a>
     </div>
 </footer>
 

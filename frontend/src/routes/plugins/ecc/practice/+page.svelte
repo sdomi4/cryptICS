@@ -137,7 +137,7 @@
         {#if $stepDetails.showCurveCheck}
             <div class="questioncontainer" transition:slide={{ delay: 0, duration: 300, easing: quintOut, axis: 'y' }}>
                 <p>{translation.curvecheck}</p>
-                {translation.curvecheckresult} <input class="answerinput" type="number" on:input={(event) => checkSingleInput(event, "curvecheck")}>
+                {translation.curvecheckresult} (4 &sdot; a<sup>3</sup> + 27 &sdot; b<sup>2</sup> mod p):<input class="answerinput" type="number" on:input={(event) => checkSingleInput(event, "curvecheck")}>
             </div>
         {/if}
         {#if $stepDetails.showPointCheck}

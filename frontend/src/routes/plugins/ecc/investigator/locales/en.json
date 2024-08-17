@@ -3,8 +3,8 @@
     "subpagetitle": "Investigate an elliptic curve",
     "formula": "Investigation of elliptic curve E over ",
     "random": "Random Curve",
-    "elliptic_true": "The curve <span style='color: green; font-weight: bold;'>E is elliptic.</span>",
-    "elliptic_false": "The curve <span style='color: red; font-weight: bold;'>E is not elliptic.</span>",
+    "elliptic_true": "The curve <span style='color: green; font-weight: bold;'>E is elliptic</span>",
+    "elliptic_false": "The curve <span style='color: red; font-weight: bold;'>E is not elliptic</span>",
     "order": "Order",
     "allpoints": "All points",
     "positivepoints": "Positive points",
@@ -15,5 +15,8 @@
     "details_one": "With point",
     "details_two": ", traversed these points",
     "singular": "The curve does not satisfy the non-singularity condition.",
-    "nonprime": "P is not prime."
+    "nonprime": "P is not prime.",
+    "cyclic_true": "and is cyclic",
+    "cyclic_false": "and is not cyclic.",
+    "allprimitivepoints": "Number of primitive points"
 }

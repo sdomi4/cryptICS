@@ -5,7 +5,7 @@
     "given2": "x + ",
     "given3": "über",
     "curvecheck": "Überprüfen Sie, ob die Kurve E eine elliptische Kurve ist.",
-    "curvecheckresult": "Resultat der Überprüfung der nicht-singularitätsbedingung:",
+    "curvecheckresult": "Resultat, wenn Kurvenparameter in die Gleichung der Nichtsingularitätsbedingung eingesetzt werden",
     "pointcheck": "Überprüfen Sie, ob Punkt P",
     "pointcheck2": "auf der Kurve E liegt.",
     "pointcheckresult": "Resultat, wenn Punkt P in der Gleichung eingesetzt wird:",

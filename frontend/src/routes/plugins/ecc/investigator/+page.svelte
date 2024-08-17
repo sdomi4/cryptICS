@@ -67,6 +67,11 @@
                 ellipticReason = translation.nonprime;
             }
         }
+        if (allPrimitivePoints.length > 0) {
+            isCyclic = true;
+        } else {
+            isCyclic = false;
+        }
     }
     
     let curveLoaded = false;
@@ -146,7 +151,7 @@
     { label: translation.primitivepoints,
 		 value: 3,
 		 component: Points,
-         props: {points: allPrimitivePoints, infinity: infinityX, translation: translation}
+         props: {points: allPrimitivePoints, infinity: null, translation: translation}
 		}
   ];
 
@@ -160,7 +165,11 @@
         <div class="formula">
             {translation.formula} <span class="zdings">&#8484;</span><sub>{p}</sub>:
             <br>
-            y<sup>2</sup> mod {p} &equiv; x<sup>3</sup> + {a}x + {b} mod {p}
+            {#if a > 0 && b > 0 && p > 0}
+                y<sup>2</sup> mod {p} &equiv; x<sup>3</sup> + {a}x + {b} mod {p}
+            {:else}
+                y<sup>2</sup> mod {p} &equiv; x<sup>3</sup> + {a}x {#if b > 0}+ {b} {/if}mod {p}
+            {/if}
         </div>
         <div class="curveform">
             <div class="inputs">
@@ -187,7 +196,7 @@
         <div class="investigator" transition:slide={{ delay: 250, duration: 1000, easing: quintOut, axis: 'y'}}>
             <div class="curveinfo">
                 <div class="elliptic">
-                    {@html isElliptic ? translation.elliptic_true : translation.elliptic_false}
+                    {@html isElliptic ? translation.elliptic_true : translation.elliptic_false}, {@html isCyclic ? translation.cyclic_true : translation.cyclic_false}
                     {#if !isElliptic}
                         {ellipticReason}
                     {/if}
@@ -196,6 +205,11 @@
                 <div class="order">
                     {translation.order}: {curveOrder}
                 </div>
+                    {#if isCyclic}
+                        <div class="primitivepoints">
+                            {translation.allprimitivepoints}: {allPrimitivePoints.length}
+                        </div>
+                    {/if}
                 {/if}
             </div>
             {#if isElliptic}

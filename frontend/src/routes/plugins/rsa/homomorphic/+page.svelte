@@ -16,15 +16,50 @@
 
     export let data;
 
-    
+
+    let initialData;
+    let modifier;
+    let decryptedData;
+    let encryptedData;
+    let modifiedData;
+    let homomorphicData;
+    let n;
+    let d;
+    let e;
 
     // reactive declarations so the components hopefully update with changes
-    $: initialData = data.body.initial_data;
-    $: modifier = data.body.modifier;
-    $: encryptedData = data.body.encrypted_data.slice(2, 126).concat("...");
-    $: modifiedData = data.body.modified_data.slice(2, 126).concat("...");
-    $: homomorphicData = data.body.homomorphic_data.slice(2, 126).concat("...");
-    $: decryptedData = data.body.decrypted_data;
+    $: {
+        initialData = data.body.initial_data;
+        modifier = data.body.modifier;
+        decryptedData = data.body.decrypted_data;
+        n = data.body.key.n;
+        d = data.body.key.d;
+        e = data.body.key.e;
+
+        if (data.body.encrypted_data.length > 128) {
+            encryptedData = data.body.encrypted_data.slice(2, 126).concat("...");
+        } else {
+            encryptedData = data.body.encrypted_data;
+        }
+        if (data.body.modified_data.length > 128) {
+            modifiedData = data.body.modified_data.slice(2, 126).concat("...");
+        } else {
+            modifiedData = data.body.modified_data;
+        }
+        if (data.body.homomorphic_data.length > 128) {
+            homomorphicData = data.body.homomorphic_data.slice(2, 126).concat("...");
+        } else {
+            homomorphicData = data.body.homomorphic_data;
+        }
+    }
+    
+    
+    
+    
+    
+    
+
+
 
     function handleInputChange(event) {
         if (event.detail === "") {
@@ -45,7 +80,8 @@
     async function updateEncryption() {
         const payload = JSON.stringify({
             initial_data: initialData,
-            modifier: modifier
+            modifier: modifier,
+            real_key: realKey
         });
         const response = await fetch('/backend/homomorphic', {
             method: 'POST',
@@ -58,10 +94,26 @@
 
         const updated_data = await response.json();
 
-        encryptedData = updated_data.encrypted_data.slice(2, 126).concat("...");
-        modifiedData = updated_data.modified_data.slice(2, 126).concat("...");
-        homomorphicData = updated_data.homomorphic_data.slice(2, 126).concat("...");
+        if (updated_data.encrypted_data.length > 128) {
+            encryptedData = updated_data.encrypted_data.slice(2, 126).concat("...");
+        } else {
+            encryptedData = updated_data.encrypted_data;
+        }
+        if (updated_data.modified_data.length > 128) {
+            modifiedData = updated_data.modified_data.slice(2, 126).concat("...");
+        } else {
+            modifiedData = updated_data.modified_data;
+        }
+        if (updated_data.homomorphic_data.length > 128) {
+            homomorphicData = updated_data.homomorphic_data.slice(2, 126).concat("...");
+        } else {
+            homomorphicData = updated_data.homomorphic_data;
+        }
         decryptedData = updated_data.decrypted_data;
+        
+        n = updated_data.key.n;
+        d = updated_data.key.d;
+        e = updated_data.key.e;
     }
 
     let translation;
@@ -73,9 +125,15 @@
     }
 
     let isOpen = true;
+    let realKey = false;
 
     function toggleExplainer() {
         isOpen = !isOpen;
+    }
+
+    function toggleKey() {
+        realKey = !realKey;
+        updateEncryption();
     }
 
     let currentStep = writable(1);
@@ -105,6 +163,14 @@
     <div class="visualisation">
         <div class="explainercontainer">
         <div class="explainer {isOpen ? '' : 'hidden'}">
+            <div class="toggle-switch-container">
+                <label class="toggle-switch">
+                    <input type="checkbox" on:change={toggleKey}>
+                    <span class="slider round"></span>
+                </label>
+                <span class="toggle-label">{realKey ? translation.real : translation.dummy}</span>
+            </div>
+
             <div class="textbox">
                 {@html currentStepText}
             </div>
@@ -114,10 +180,10 @@
             </div>
         </div>
     
-        <div class="tabbutton {isOpen ? '' : 'hidden'}" on:click={toggleExplainer}>
-            <div class="buttonarrow {isOpen ? '' : 'hidden'}"></div>
+            <div class="tabbutton {isOpen ? '' : 'hidden'}" on:click={toggleExplainer}>
+                <div class="buttonarrow {isOpen ? '' : 'hidden'}"></div>
+            </div>
         </div>
-    </div>
         <div class="gridcontainer {isOpen ? '' : 'hidden'}">
             <div class="griditem input">
                 <div class="inputblock">
@@ -205,6 +271,12 @@
             </div>  
             {/if}
         </div>
+    </div>
+    <div class="rsakey">
+        <h3>{translation.key}</h3>
+        <p class="keytext"><strong>N:</strong> {n}</p>
+        <p class="keytext"><strong>e:</strong> {e}</p>
+        <p class="keytext"><strong>d:</strong> {d}</p>
     </div>
 </div>
 </body>
@@ -299,6 +371,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        justify-content: center;
     }
 
     .multiplicator, .equals {
@@ -334,5 +407,65 @@
         justify-content: space-around;
         margin-top: auto;
         gap: 25px;
+    }
+
+    .toggle-switch-container {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .toggle-switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+        margin-right: 10px;
+    }
+
+    .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 34px;
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+    }
+
+    input:checked + .slider {
+        background-color: #007BFF;
+    }
+
+    input:checked + .slider:before {
+        transform: translateX(26px);
+    }
+
+    .toggle-label {
+        font-size: 16px;
+    }
+
+    .keytext {
+        line-break: anywhere;
     }
 </style>
