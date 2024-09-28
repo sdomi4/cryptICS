@@ -4,6 +4,8 @@
     "title": "Block Ciphers",
     "overviewtitle": "Overview",
     "introtext": "Block ciphers and their modes are a core part of cryptography. Different modes have different strengths and weaknesses.",
-    "diffconf": "See how the avalanche effect applies to block ciphers.",
+    "diffconf": "Two effects can be demonstrated:",
+    "avalanchesub1": "Changing one bit in the plaintext changes about 50% of the ciphertext bits with the same key.",
+    "avalanchesub2": "Changing one bit in the key changes about 50% of the ciphertext bits with the same plaintext.",
     "modes": "Learn about the different cipher modes of block ciphers and their behavior."
 }

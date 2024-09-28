@@ -36,7 +36,14 @@
     </div>
     <div class="sections">
     <div class="sectioncontainer">
-      {translation.diffconf}
+      {translation.diffconf} <br>
+      <li>
+        {translation.avalanchesub1}
+      </li>
+      <li>
+        {translation.avalanchesub2}
+      </li>
+
       <div class="sectionlink">
         <a href='/plugins/blockciphers/avalanche'>{translation.diffconftitle}</a>  
       </div>
