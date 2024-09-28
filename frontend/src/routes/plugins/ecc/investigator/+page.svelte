@@ -168,7 +168,7 @@
             {#if a > 0 && b > 0 && p > 0}
                 y<sup>2</sup> mod {p} &equiv; x<sup>3</sup> + {a}x + {b} mod {p}
             {:else}
-                y<sup>2</sup> mod {p} &equiv; x<sup>3</sup> + {a}x {#if b > 0}+ {b} {/if}mod {p}
+                y<sup>2</sup> mod {p} &equiv; x<sup>3</sup> {#if a >0}+ {a}x {/if}{#if b > 0}+ {b} {/if}mod {p}
             {/if}
         </div>
         <div class="curveform">

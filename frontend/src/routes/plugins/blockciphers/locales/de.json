@@ -4,6 +4,8 @@
     "title": "Blockchiffren",
     "overviewtitle": "Übersicht",
     "introtext": "Blockchiffren und ihre Modi sind ein Grundbaustein der Kryptographie. Die unterschiedlichen Modi haben alle ihre Stärken und Schwächen.",
-    "diffconf": "Der Lawineneffekt, demonstriert anhand von Blockchiffren.",
-    "modes": "Die verschidenen Modi von Blockchiffren sowie deren Eigenheiten."
+    "diffconf": "Es können zwei Effekte demonstriert werden:",
+    "avalanchesub1": "Ein Bit im Klartext verändert bei gleichem Schlüssel ca. 50% der Chiffretextbits.",
+    "avalanchesub2": "Ein Bit im Schlüssel verändert bei gleichem Klartext ca. 50% der Chiffretextbits.",
+    "modes": "Die verschiedenen Modi von Blockchiffren sowie deren Eigenheiten."
 }
