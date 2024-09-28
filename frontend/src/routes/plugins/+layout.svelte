@@ -10,6 +10,10 @@
 
     import { language } from '$lib/language'
 
+    // jank to properly persist language toggle
+    let isGerman;
+    $: isGerman = $language === 'de';
+
     function toggleLanguage() {
         language.update(lang => lang === 'en' ? 'de' : 'en');
     }
@@ -46,7 +50,7 @@
             </div>
             <div class="language-toggle">
                 <input type="checkbox" id="lang-toggle" 
-                    checked={language === 'de'} 
+                    bind:checked={isGerman} 
                     on:change={toggleLanguage}>
                 <label for="lang-toggle" style="background-image: url({$language === 'en' ? ukFlag : deFlag});">
                     <span class="toggle-track"></span>

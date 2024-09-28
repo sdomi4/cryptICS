@@ -11,8 +11,13 @@
     import de from './locales/de.json'
     import en from './locales/en.json'
     import { language } from '$lib/language';
+    console.log($language);
     let translation;
     $: translation = $language === 'en' ? en : de;
+
+    // jank to properly persist language toggle
+    let isGerman;
+    $: isGerman = $language === 'de';
 
     function toggleLanguage() {
         language.update(lang => lang === 'en' ? 'de' : 'en');
@@ -26,7 +31,7 @@
 <header>
     <div class="language-toggle">
         <input type="checkbox" id="lang-toggle" 
-               checked={language === 'de'} 
+               bind:checked={isGerman} 
                on:change={toggleLanguage}>
         <label for="lang-toggle">
             <span class="toggle-track"></span>
