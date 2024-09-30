@@ -13,6 +13,8 @@
     $: a = 'a';
     $: b = 'b';
     $: p = 'p';
+    $: _a = 'a';
+    $: _b = 'b';
   
     import { language } from '$lib/language';
 
@@ -27,17 +29,35 @@
         pageTitle.set(translation.subpagetitle);
     }
 
+    function mod(n, m) {
+        return ((n % m) + m) % m;
+    }
+
     function handleInput(event) {
         const { name, value } = event.target;
         if (value === "") {
             // Reset to default if input is empty
-            if (name === "a") a = 'a';
-            if (name === "b") b = 'b';
+            if (name === "a") {
+                a = 'a';
+                _a = 'a';
+            }
+            if (name === "b") {
+                b = 'b';
+                _b = 'b';
+            } 
             if (name === "p") p = 'p';
         } else {
             // Update variable with input value
-            if (name === "a") a = value;
-            if (name === "b") b = value;
+
+            // run modulo p and update var
+            if (name === "a") {
+                a = mod(value, p);
+                _a = value;
+            } 
+            if (name === "b") {
+                b = mod(value, p);
+                _b = value;
+            }
             if (name === "p") p = value;
         }
         // if all are set, investigate curve
@@ -125,16 +145,14 @@
         if (response.ok) {
             const curve = await response.json();
             a = curve.a;
+            _a = curve.a;
             b = curve.b;
+            _b = curve.b;
             p = curve.p;
             investigate_curve(a, b, p);
         } else {
             console.error('Failed to fetch random curve:', response.statusText);
         }
-    }
-
-    function get_cyclic_curve() {
-
     }
     
     $: tabs = [
@@ -176,15 +194,15 @@
                 <div class="inputfields">
                     <div class="inputfield ecc-a">
                         <label for="a">a=</label>
-                        <input type="number" id="a" name="a" on:input={handleInput} bind:value={a}>
+                        <input type="number" id="a" name="a" on:input={handleInput} bind:value={_a}>
                     </div>
                     <div class="inputfield ecc-b">
                         <label for="b">b=</label>
-                        <input type="number" id="b" name="b" on:input={handleInput} bind:value={b}>
+                        <input type="number" id="b" name="b" on:input={handleInput} bind:value={_b}>
                     </div>
                     <div class="inputfield ecc-p">
                         <label for="p">p=</label>
-                        <input type="number" id="p" name="p" on:input={handleInput} bind:value={p}>
+                        <input type="number" min="0" id="p" name="p" on:input={handleInput} bind:value={p}>
                     </div>
                 </div>
             </div>
